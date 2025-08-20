@@ -35,6 +35,9 @@ Superior-Academic-Tool/
 │   ├── styles.css         # CSS styles
 │   ├── script.js          # JavaScript functionality
 │   └── assets/            # Static assets
+├── uploads/               # Uploaded files
+│   ├── csv/               # CSV files
+│   └── xlsx/              # XLSX files
 └── venv/                  # Virtual environment (created after setup)
 ```
 
