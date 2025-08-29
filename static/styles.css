@@ -1418,3 +1418,121 @@ body {
 [data-bs-theme="dark"] .social-link:hover .fab.fa-github {
     color: #ffffff;
 }
+
+/* Custom Schedule Styles */
+#custom-schedule-container .card {
+    border: none;
+    border-radius: 12px;
+    box-shadow: var(--shadow-lg);
+    overflow: hidden;
+}
+
+#custom-schedule-container .card-header {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    border: none;
+    padding: 1rem 1.5rem;
+}
+
+#custom-schedule-container .card-header h5 {
+    margin: 0;
+    font-weight: 600;
+    color: white;
+}
+
+#schedule-table table {
+    margin-bottom: 0;
+}
+
+#schedule-table th {
+    background-color: var(--dark-color);
+    color: white;
+    font-weight: 600;
+    border: none;
+    padding: 1rem 0.75rem;
+    text-align: center;
+    font-size: 0.875rem;
+}
+
+#schedule-table td {
+    padding: 0.875rem 0.75rem;
+    vertical-align: middle;
+    border-color: var(--border-color);
+    text-align: center;
+    font-size: 0.875rem;
+}
+
+#schedule-table tbody tr:hover {
+    background-color: rgba(59, 130, 246, 0.05);
+}
+
+[data-bs-theme="dark"] #schedule-table tbody tr:hover {
+    background-color: rgba(59, 130, 246, 0.1);
+}
+
+#schedule-table .btn-outline-danger {
+    border: 1px solid var(--danger-color);
+    color: var(--danger-color);
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
+}
+
+#schedule-table .btn-outline-danger:hover {
+    background-color: var(--danger-color);
+    color: white;
+}
+
+/* Form controls for custom schedule */
+.content-section .form-group label {
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+}
+
+.content-section .form-control:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.2rem rgba(59, 130, 246, 0.25);
+}
+
+/* Download button styling */
+#download-btn {
+    background: linear-gradient(135deg, var(--success-color), #059669);
+    border: none;
+    font-weight: 600;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+#download-btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+
+#download-btn:disabled {
+    background: #9ca3af;
+    cursor: not-allowed;
+}
+
+/* Add to schedule button */
+#add-to-schedule-btn:disabled {
+    background-color: #d1d5db;
+    border-color: #d1d5db;
+    color: #9ca3af;
+    cursor: not-allowed;
+}
+
+/* Responsive table for custom schedule */
+@media (max-width: 768px) {
+    #schedule-table th,
+    #schedule-table td {
+        padding: 0.5rem 0.25rem;
+        font-size: 0.75rem;
+    }
+    
+    #schedule-table th:nth-child(5),
+    #schedule-table td:nth-child(5),
+    #schedule-table th:nth-child(6),
+    #schedule-table td:nth-child(6) {
+        display: none;
+    }
+}
