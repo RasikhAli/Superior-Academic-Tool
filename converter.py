@@ -1,5 +1,6 @@
 from openpyxl.utils import get_column_letter
 from openpyxl import load_workbook
+from openpyxl.cell.cell import Cell
 from datetime import datetime
 import pandas as pd
 import re
@@ -27,6 +28,9 @@ def convert_xlsx_to_csv(input_filename, output_filename=None):
     # Load workbook and worksheet
     wb = load_workbook(filename=input_filename)
     ws = wb.active
+
+    if ws is None:
+        raise ValueError("Worksheet is not available")
 
     # Define layout structure
     day_blocks = [
@@ -84,7 +88,9 @@ def convert_xlsx_to_csv(input_filename, output_filename=None):
     rows = []
 
     for block in day_blocks:
-        raw_day = ws[block["day_cell"]].value
+        cellRef: str = block["day_cell"]
+        cell: Cell = ws[cellRef]
+        raw_day = cell.value
         if isinstance(raw_day, datetime):
             day = raw_day.strftime("%A")
         else:

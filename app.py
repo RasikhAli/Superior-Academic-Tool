@@ -1,15 +1,11 @@
 from flask import Flask, request, render_template, jsonify
 import csv
-from io import BytesIO
 import os
-from datetime import datetime
 import re
 import glob
-import subprocess
-import sys
 import importlib
-import converter  # Import the converter module
-from cgpa_calculator import cgpa_bp  # Import the CGPA calculator blueprint
+import converter
+from cgpa_calculator import cgpa_bp
 
 app = Flask(__name__)
 
