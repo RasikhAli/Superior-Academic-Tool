@@ -36,8 +36,23 @@ $(document).ready(function() {
         width: '100%'
     });
     
+    $('#subject-select').select2({
+        placeholder: "Search for a subject...",
+        allowClear: true,
+        width: '100%'
+    });
+    
+    $('#section-select-custom').select2({
+        placeholder: "Choose a section...",
+        allowClear: true,
+        width: '100%'
+    });
+    
     // Load sections for section timetable and update dashboard
     loadSections();
+    
+    // Load subjects for custom schedule
+    loadSubjects();
     
     // Load all teacher timetables initially
     loadAllTeacherTimetables();
@@ -485,4 +500,310 @@ function mergeConsecutiveSlots(entries) {
     // Add the last entry
     merged.push(current);
     return merged;
+}
+
+// Custom Schedule Management
+let customSchedule = [];
+
+// Load subjects for custom schedule
+function loadSubjects() {
+    fetch('/get_subjects')
+        .then(response => response.json())
+        .then(subjects => {
+            const subjectSelect = document.getElementById('subject-select');
+            subjectSelect.innerHTML = '<option value="">Choose a subject...</option>';
+            
+            subjects.forEach(subject => {
+                const option = document.createElement('option');
+                option.value = subject;
+                option.textContent = subject;
+                subjectSelect.appendChild(option);
+            });
+            
+            // Add event listener for subject selection
+            $('#subject-select').on('change', function() {
+                const selectedSubject = this.value;
+                if (selectedSubject) {
+                    loadSectionsForSubject(selectedSubject);
+                } else {
+                    clearSectionSelection();
+                }
+            });
+        })
+        .catch(error => {
+            console.error('Error loading subjects:', error);
+        });
+}
+
+// Load sections for a specific subject
+function loadSectionsForSubject(subject) {
+    const sectionSelect = document.getElementById('section-select-custom');
+    const addButton = document.getElementById('add-to-schedule-btn');
+    
+    // Show loading state
+    sectionSelect.innerHTML = '<option value="">Loading sections...</option>';
+    sectionSelect.disabled = true;
+    addButton.disabled = true;
+    
+    fetch(`/get_sections_for_subject?subject=${encodeURIComponent(subject)}`)
+        .then(response => response.json())
+        .then(sections => {
+            sectionSelect.innerHTML = '<option value="">Choose a section...</option>';
+            
+            sections.forEach(section => {
+                const option = document.createElement('option');
+                option.value = section;
+                option.textContent = section;
+                sectionSelect.appendChild(option);
+            });
+            
+            sectionSelect.disabled = false;
+            $('#section-select-custom').trigger('change');
+            
+            // Add event listener for section selection
+            $('#section-select-custom').off('change.customSchedule').on('change.customSchedule', function() {
+                addButton.disabled = !this.value;
+            });
+        })
+        .catch(error => {
+            console.error('Error loading sections for subject:', error);
+            sectionSelect.innerHTML = '<option value="">Error loading sections</option>';
+        });
+}
+
+// Add subject to custom schedule
+function addToSchedule() {
+    const subject = document.getElementById('subject-select').value;
+    const section = document.getElementById('section-select-custom').value;
+    
+    if (!subject || !section) {
+        alert('Please select both subject and section.');
+        return;
+    }
+    
+    // Check if this combination already exists
+    const exists = customSchedule.some(item => 
+        item.subject === subject && item.section === section
+    );
+    
+    if (exists) {
+        alert('This subject-section combination is already in your schedule.');
+        return;
+    }
+    
+    // Get subject details
+    fetch(`/get_subject_details?subject=${encodeURIComponent(subject)}&section=${encodeURIComponent(section)}`)
+        .then(response => response.json())
+        .then(details => {
+            if (details.length === 0) {
+                alert('No schedule found for this subject-section combination.');
+                return;
+            }
+            
+            // Add to custom schedule
+            details.forEach(detail => {
+                customSchedule.push(detail);
+            });
+            
+            // Update the display
+            updateCustomScheduleDisplay();
+            
+            // Clear selections
+            $('#subject-select').val(null).trigger('change');
+            $('#section-select-custom').val(null).trigger('change');
+            document.getElementById('add-to-schedule-btn').disabled = true;
+            
+            // Enable download button
+            document.getElementById('download-btn').disabled = false;
+        })
+        .catch(error => {
+            console.error('Error getting subject details:', error);
+            alert('Error adding to schedule. Please try again.');
+        });
+}
+
+// Update custom schedule display
+function updateCustomScheduleDisplay() {
+    const container = document.getElementById('schedule-table-container');
+    
+    if (customSchedule.length === 0) {
+        container.innerHTML = `
+            <div class="text-center text-muted">
+                <i class="fas fa-info-circle fa-2x mb-3"></i>
+                <p>Your custom schedule will appear here. Start by adding subjects above.</p>
+            </div>
+        `;
+        document.getElementById('download-btn').disabled = true;
+        return;
+    }
+    
+    // Sort schedule by day and time
+    const sortedSchedule = sortEntriesByDayAndTime(customSchedule);
+    
+    // Generate HTML table
+    let html = `
+        <div class="table-responsive" id="schedule-table">
+            <table class="table table-bordered">
+                <thead class="thead-dark">
+                    <tr>
+                        <th><i class="fas fa-calendar-day mr-2"></i>Day</th>
+                        <th><i class="fas fa-clock mr-2"></i>Time</th>
+                        <th><i class="fas fa-book mr-2"></i>Subject</th>
+                        <th><i class="fas fa-users mr-2"></i>Section</th>
+                        <th><i class="fas fa-map-marker-alt mr-2"></i>Location</th>
+                        <th><i class="fas fa-chalkboard-teacher mr-2"></i>Teacher</th>
+                        <th><i class="fas fa-trash mr-2"></i>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+    `;
+    
+    sortedSchedule.forEach((entry, index) => {
+        html += `
+            <tr>
+                <td>${entry.day}</td>
+                <td>${entry.start_time} - ${entry.end_time}</td>
+                <td>${entry.subject}</td>
+                <td>${entry.section}</td>
+                <td>${entry.location}</td>
+                <td>${entry.teachers}</td>
+                <td>
+                    <button class="btn btn-sm btn-outline-danger" onclick="removeFromSchedule(${index})" title="Remove from schedule">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </td>
+            </tr>
+        `;
+    });
+    
+    html += `
+                </tbody>
+            </table>
+        </div>
+    `;
+    
+    container.innerHTML = html;
+}
+
+// Remove item from custom schedule
+function removeFromSchedule(index) {
+    customSchedule.splice(index, 1);
+    updateCustomScheduleDisplay();
+}
+
+// Clear entire schedule
+function clearSchedule() {
+    if (customSchedule.length === 0) {
+        return;
+    }
+    
+    if (confirm('Are you sure you want to clear your entire schedule?')) {
+        customSchedule = [];
+        updateCustomScheduleDisplay();
+    }
+}
+
+// Download schedule as image
+function downloadScheduleAsImage() {
+    if (customSchedule.length === 0) {
+        alert('Please add some subjects to your schedule first.');
+        return;
+    }
+    
+    const scheduleTable = document.getElementById('schedule-table');
+    if (!scheduleTable) {
+        alert('No schedule found to download.');
+        return;
+    }
+    
+    // Use html2canvas to convert the table to image
+    // First, we need to load the html2canvas library
+    if (typeof html2canvas === 'undefined') {
+        // Load html2canvas dynamically
+        const script = document.createElement('script');
+        script.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
+        script.onload = function() {
+            captureScheduleAsImage();
+        };
+        document.head.appendChild(script);
+    } else {
+        captureScheduleAsImage();
+    }
+}
+
+// Capture schedule as image using html2canvas
+function captureScheduleAsImage() {
+    const scheduleContainer = document.getElementById('custom-schedule-container');
+    const downloadBtn = document.getElementById('download-btn');
+    
+    // Show loading state
+    const originalText = downloadBtn.innerHTML;
+    downloadBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Generating...';
+    downloadBtn.disabled = true;
+    
+    // Clone the schedule container to modify for image generation
+    const clone = scheduleContainer.cloneNode(true);
+    
+    // Remove action column from the clone
+    const actionCells = clone.querySelectorAll('th:last-child, td:last-child');
+    actionCells.forEach(cell => cell.remove());
+    
+    // Style the clone for better image quality
+    clone.style.backgroundColor = 'white';
+    clone.style.padding = '20px';
+    clone.style.fontFamily = 'Arial, sans-serif';
+    clone.style.position = 'absolute';
+    clone.style.left = '-9999px';
+    clone.style.top = '-9999px';
+    clone.style.width = '800px';
+    
+    // Add clone to document temporarily
+    document.body.appendChild(clone);
+    
+    // Capture the image
+    html2canvas(clone, {
+        backgroundColor: '#ffffff',
+        scale: 2,
+        useCORS: true,
+        allowTaint: true
+    }).then(canvas => {
+        // Create download link
+        const link = document.createElement('a');
+        link.download = 'my-custom-schedule.png';
+        link.href = canvas.toDataURL('image/png');
+        
+        // Trigger download
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        
+        // Clean up
+        document.body.removeChild(clone);
+        
+        // Restore button
+        downloadBtn.innerHTML = originalText;
+        downloadBtn.disabled = false;
+        
+    }).catch(error => {
+        console.error('Error generating image:', error);
+        alert('Error generating image. Please try again.');
+        
+        // Clean up
+        document.body.removeChild(clone);
+        
+        // Restore button
+        downloadBtn.innerHTML = originalText;
+        downloadBtn.disabled = false;
+    });
+}
+
+// Clear section selection for custom schedule
+function clearSectionSelection() {
+    const sectionSelect = document.getElementById('section-select-custom');
+    const addButton = document.getElementById('add-to-schedule-btn');
+    
+    sectionSelect.innerHTML = '<option value="">First select a subject...</option>';
+    sectionSelect.disabled = true;
+    addButton.disabled = true;
+    $('#section-select-custom').trigger('change');
 }

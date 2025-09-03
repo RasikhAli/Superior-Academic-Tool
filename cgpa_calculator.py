@@ -4,7 +4,7 @@ from flask import Blueprint, render_template, request, jsonify
 # Create a blueprint for the CGPA calculator
 cgpa_bp = Blueprint('cgpa', __name__)
 
-def calculate_gpa(subjects, marks, credit_hours, is_first_semester, previous_cgpa=0, previous_credits=0):
+def calculate_gpa(subjects, marks, credit_hours, is_first_semester, previous_cgpa=0.0, previous_credits=0):
     total_credits = 0
     total_points = 0
     grades = {}

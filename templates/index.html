@@ -217,9 +217,64 @@
             <div id="schedule" class="content-section">
                 <div class="content-container">
                     <h2 class="page-title">
-                        <i class="fas fa-clock mr-3"></i>Schedule Management
+                        <i class="fas fa-clock mr-3"></i>Custom Schedule Builder
                     </h2>
-                    <p class="text-muted">Schedule management features coming soon...</p>
+                    
+                    <div class="row mb-4">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="subject-select"><i class="fas fa-book mr-2"></i>Select Subject:</label>
+                                <select class="form-control" id="subject-select">
+                                    <option value="">Choose a subject...</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="section-select-custom"><i class="fas fa-users mr-2"></i>Select Section:</label>
+                                <select class="form-control" id="section-select-custom" disabled>
+                                    <option value="">First select a subject...</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>&nbsp;</label>
+                                <button class="btn btn-primary btn-block" id="add-to-schedule-btn" onclick="addToSchedule()" disabled>
+                                    <i class="fas fa-plus mr-2"></i>Add to Schedule
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <button class="btn btn-success" onclick="downloadScheduleAsImage()" id="download-btn" disabled>
+                                <i class="fas fa-download mr-2"></i>Download as Image
+                            </button>
+                        </div>
+                        <div class="col-md-6 text-right">
+                            <button class="btn btn-danger" onclick="clearSchedule()">
+                                <i class="fas fa-trash mr-2"></i>Clear Schedule
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="custom-schedule-container">
+                        <div class="card">
+                            <div class="card-header bg-primary text-white">
+                                <h5 class="mb-0"><i class="fas fa-calendar-alt mr-2"></i>My Custom Schedule</h5>
+                            </div>
+                            <div class="card-body">
+                                <div id="schedule-table-container">
+                                    <div class="text-center text-muted">
+                                        <i class="fas fa-info-circle fa-2x mb-3"></i>
+                                        <p>Your custom schedule will appear here. Start by adding subjects above.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
