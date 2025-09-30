@@ -1,15 +1,11 @@
 from flask import Flask, request, render_template, jsonify
 import csv
-from io import BytesIO
 import os
-from datetime import datetime
 import re
 import glob
-import subprocess
-import sys
 import importlib
-import converter  # Import the converter module
-from cgpa_calculator import cgpa_bp  # Import the CGPA calculator blueprint
+import converter
+from cgpa_calculator import cgpa_bp
 
 app = Flask(__name__)
 
@@ -152,6 +148,82 @@ def get_sections():
                     sections.update(group_parts)
     
     return jsonify(sorted(list(sections)))
+
+@app.route('/get_subjects')
+def get_subjects():
+    """Get all unique subjects from the timetable data"""
+    subjects = set()
+    for entries in timetable_data.values():
+        for entry in entries:
+            if entry['subject']:
+                subjects.add(entry['subject'])
+    
+    return jsonify(sorted(list(subjects)))
+
+@app.route('/get_sections_for_subject')
+def get_sections_for_subject():
+    """Get all sections that have a specific subject"""
+    subject = request.args.get('subject', '')
+    sections = set()
+    
+    if subject:
+        for entries in timetable_data.values():
+            for entry in entries:
+                if entry['subject'] == subject and entry['groups']:
+                    if isinstance(entry['groups'], list):
+                        sections.update(entry['groups'])
+                    else:
+                        # Fallback for string format
+                        group_parts = [g.strip() for g in entry['groups'].split('/')]
+                        sections.update(group_parts)
+    
+    return jsonify(sorted(list(sections)))
+
+@app.route('/get_subject_details')
+def get_subject_details():
+    """Get details for a specific subject in a specific section"""
+    subject = request.args.get('subject', '')
+    section = request.args.get('section', '')
+    
+    details = []
+    
+    if subject and section:
+        for entries in timetable_data.values():
+            for entry in entries:
+                if entry['subject'] == subject:
+                    # Check if the section is in this entry's groups
+                    groups = entry['groups']
+                    section_found = False
+                    
+                    if isinstance(groups, list):
+                        section_found = section in groups
+                    else:
+                        # Fallback for string format
+                        group_parts = [g.strip() for g in groups.split('/')]
+                        section_found = section in group_parts
+                    
+                    if section_found:
+                        details.append({
+                            'day': entry['day'],
+                            'start_time': entry['start_time'],
+                            'end_time': entry['end_time'],
+                            'location': entry['location'],
+                            'subject': entry['subject'],
+                            'teachers': entry['teachers'],
+                            'section': section
+                        })
+    
+    # Remove duplicates and sort
+    unique_details = []
+    seen = set()
+    for detail in details:
+        key = f"{detail['day']}-{detail['start_time']}-{detail['end_time']}-{detail['location']}-{detail['subject']}-{detail['teachers']}"
+        if key not in seen:
+            seen.add(key)
+            unique_details.append(detail)
+    
+    # Sort by day and time
+    return jsonify(sort_entries_by_day_and_time(unique_details))
 
 @app.route('/')
 def index():
