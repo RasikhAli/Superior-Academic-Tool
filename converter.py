@@ -5,6 +5,21 @@ import pandas as pd
 import re
 import os
 
+def convert_to_24hour(time_str, period):
+    """Convert 12-hour time to 24-hour format"""
+    if not period:
+        return time_str
+    
+    hour, minute = time_str.split(':')
+    hour = int(hour)
+    
+    if period.upper() == 'PM' and hour != 12:
+        hour += 12
+    elif period.upper() == 'AM' and hour == 12:
+        hour = 0
+    
+    return f"{hour:02d}:{minute}"
+
 def convert_xlsx_to_csv(input_filename, output_filename=None):
     """
     Convert Excel timetable to CSV format
@@ -24,25 +39,20 @@ def convert_xlsx_to_csv(input_filename, output_filename=None):
     # Ensure output directory exists
     os.makedirs(os.path.dirname(output_filename), exist_ok=True)
     
-    # Load workbook and worksheet
+    # Load workbook and get all worksheets
     wb = load_workbook(filename=input_filename)
-    ws = wb.active
+    worksheets = wb.worksheets
 
-    # Define layout structure
+    # Define layout structure with worksheet information
     day_blocks = [
-        {"day_cell": "B5", "room_rows": range(7, 21),  "time_row": 5},
-        {"day_cell": "B21", "room_rows": range(23, 36), "time_row": 22},
-        {"day_cell": "B36", "room_rows": range(38, 52), "time_row": 37},
-        {"day_cell": "B52", "room_rows": range(54, 67), "time_row": 53},
-        {"day_cell": "B67", "room_rows": range(69, 83), "time_row": 68},
-        {"day_cell": "B83", "room_rows": range(85, 92), "time_row": 84},
-        {"day_cell": "B92", "room_rows": range(94, 99), "time_row": 93},
+        {"day_cell": "B6", "room_rows": range(7, 22), "time_row": 5, "sheet_index": 0, "time_cols": range(4, 12)},  # D to K
+        {"day_cell": "B22", "room_rows": range(24, 38), "time_row": 23, "sheet_index": 0, "time_cols": range(4, 12)},
+        {"day_cell": "B38", "room_rows": range(40, 55), "time_row": 39, "sheet_index": 0, "time_cols": range(4, 12)},
+        {"day_cell": "B55", "room_rows": range(57, 71), "time_row": 56, "sheet_index": 0, "time_cols": range(4, 12)},
+        {"day_cell": "B71", "room_rows": range(73, 88), "time_row": 72, "sheet_index": 0, "time_cols": range(4, 12)},
+        {"day_cell": "B1", "room_rows": range(3, 10), "time_row": 2, "sheet_index": 1, "time_cols": range(4, 8)},  # D to G
+        {"day_cell": "B10", "room_rows": range(12, 17), "time_row": 11, "sheet_index": 1, "time_cols": range(4, 8)},  # D to G
     ]
-
-    time_cols = range(4, 11)  # D to J
-
-    # Read merged cell values correctly
-    merged_cells = ws.merged_cells.ranges
 
     def fix_class_group_format(class_group_str):
         if not class_group_str:
@@ -84,6 +94,21 @@ def convert_xlsx_to_csv(input_filename, output_filename=None):
     rows = []
 
     for block in day_blocks:
+        # Get the appropriate worksheet
+        ws = worksheets[block["sheet_index"]]
+        
+        # Get merged cells for this worksheet
+        merged_cells = ws.merged_cells.ranges
+        
+        # Update get_cell_value to use current worksheet
+        def get_cell_value(row, col):
+            cell = ws.cell(row=row, column=col)
+            coord = f"{get_column_letter(col)}{row}"
+            for merged in merged_cells:
+                if coord in merged:
+                    return ws.cell(merged.min_row, merged.min_col).value
+            return cell.value
+        
         raw_day = ws[block["day_cell"]].value
         if isinstance(raw_day, datetime):
             day = raw_day.strftime("%A")
@@ -92,8 +117,9 @@ def convert_xlsx_to_csv(input_filename, output_filename=None):
 
         time_row = block["time_row"]
         room_rows = block["room_rows"]
+        time_cols = block["time_cols"]
 
-        # Get all time slots (from D to J)
+        # Get all time slots for this block
         time_slots = {col: str(get_cell_value(time_row, col)).strip() for col in time_cols}
 
         # Loop through each row (i.e., room) and each time slot
@@ -123,11 +149,28 @@ def convert_xlsx_to_csv(input_filename, output_filename=None):
                         line = fix_class_group_format(line)
                         groups.append(line)
                     else:
-                        # Detect teacher and timeslot (e.g., "Ms. Kanwal Shahbaz (08:00 - 10:00)")
-                        match = re.match(r"(.*)\s*\((\d{1,2}:\d{2} - \d{1,2}:\d{2})\)", line)
+                        # Detect teacher and timeslot (e.g., "Ms. Namra Amjad (10:45 AM TO 12:25 PM)")
+                        match = re.match(r"(.*?)\s*\(([^)]+)\)\s*$", line)
                         if match:
                             teacher_name = match.group(1).strip()
-                            teacher_timeslot = match.group(2).strip()
+                            timeslot_text = match.group(2).strip()
+                            
+                            # Extract time from various formats and convert to 24-hour
+                            time_match = re.search(r'(\d{1,2}:\d{2})\s*(AM|PM)?\s*(?:-|TO)\s*(\d{1,2}:\d{2})\s*(AM|PM)?', timeslot_text, re.IGNORECASE)
+                            if time_match:
+                                start_time = time_match.group(1)
+                                start_period = time_match.group(2)
+                                end_time = time_match.group(3)
+                                end_period = time_match.group(4)
+                                
+                                # Convert to 24-hour format if AM/PM is present
+                                if start_period:
+                                    start_time = convert_to_24hour(start_time, start_period)
+                                if end_period:
+                                    end_time = convert_to_24hour(end_time, end_period)
+                                
+                                teacher_timeslot = f"{start_time} - {end_time}"
+                            
                             teachers.append(teacher_name)
                         else:
                             # Consider it part of teacher names if not matched with timeslot
@@ -168,6 +211,21 @@ def convert_xlsx_to_csv(input_filename, output_filename=None):
     print(f"Converted {input_filename} to {output_filename}")
     
     return output_filename
+
+def convert_to_24hour(time_str, period):
+    """Convert 12-hour time to 24-hour format"""
+    if not period:
+        return time_str
+    
+    hour, minute = time_str.split(':')
+    hour = int(hour)
+    
+    if period.upper() == 'PM' and hour != 12:
+        hour += 12
+    elif period.upper() == 'AM' and hour == 12:
+        hour = 0
+    
+    return f"{hour:02d}:{minute}"
 
 # If run directly, use the hardcoded filename
 if __name__ == "__main__":

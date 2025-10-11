@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template, jsonify
+from flask import Flask, request, render_template, jsonify, send_file
 import csv
 from io import BytesIO
 import os
@@ -10,6 +10,7 @@ import sys
 import importlib
 import converter  # Import the converter module
 from cgpa_calculator import cgpa_bp  # Import the CGPA calculator blueprint
+import pandas as pd
 
 app = Flask(__name__)
 
@@ -476,6 +477,100 @@ def sort_teachers_by_prefix_and_name(teachers):
     )
     
     return sorted_teachers
+
+@app.route('/section/<int:semester>')
+def get_section_by_semester(semester):
+    """Get all sections for a specific semester number"""
+    sections_data = []
+    
+    for entries in timetable_data.values():
+        for entry in entries:
+            groups = entry['groups']
+            if groups:
+                if isinstance(groups, list):
+                    # Check if any group contains the semester number
+                    matching_groups = [group for group in groups if str(semester) in group]
+                    if matching_groups:
+                        entry_copy = entry.copy()
+                        entry_copy['groups'] = matching_groups
+                        sections_data.append(entry_copy)
+                else:
+                    if str(semester) in groups:
+                        sections_data.append(entry)
+    
+    # Sort the data by day and time before returning
+    sorted_data = sort_entries_by_day_and_time(sections_data)
+    
+    return jsonify(sorted_data)
+
+@app.route('/section/<int:semester>/download')
+def download_section_by_semester(semester):
+    """Download all sections for a specific semester as Excel file"""
+    sections_data = []
+    
+    for entries in timetable_data.values():
+        for entry in entries:
+            groups = entry['groups']
+            if groups:
+                if isinstance(groups, list):
+                    matching_groups = [group for group in groups if str(semester) in group]
+                    if matching_groups:
+                        for group in matching_groups:
+                            entry_copy = entry.copy()
+                            entry_copy['section'] = group
+                            entry_copy['groups_display'] = ', '.join(entry_copy['groups'])
+                            sections_data.append(entry_copy)
+                else:
+                    if str(semester) in groups:
+                        entry_copy = entry.copy()
+                        entry_copy['section'] = groups
+                        entry_copy['groups_display'] = groups
+                        sections_data.append(entry_copy)
+    
+    if not sections_data:
+        return jsonify({"error": f"No data found for semester {semester}"}), 404
+    
+    # Define day order for proper sorting
+    day_order = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+    
+    def get_day_index(day):
+        return day_order.index(day) if day in day_order else 999
+    
+    # Sort by section first, then by day order, then by time
+    sections_data.sort(key=lambda x: (
+        x['section'], 
+        get_day_index(x['day']), 
+        time_to_minutes(x['start_time'])
+    ))
+    
+    # Create DataFrame
+    df_data = []
+    for entry in sections_data:
+        df_data.append({
+            'Section': entry['section'],
+            'Day': entry['day'],
+            'Start Time': entry['start_time'],
+            'End Time': entry['end_time'],
+            'Subject': entry['subject'],
+            'Location': entry['location'],
+            'Teachers': entry['teachers']
+        })
+    
+    df = pd.DataFrame(df_data)
+    
+    # Create Excel file in memory
+    output = BytesIO()
+    with pd.ExcelWriter(output, engine='openpyxl') as writer:
+        df.to_excel(writer, sheet_name=f'Semester {semester}', index=False)
+    
+    output.seek(0)
+    
+    return send_file(
+        output,
+        mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        as_attachment=True,
+        download_name=f'semester_{semester}_timetable.xlsx'
+    )
 
 if __name__ == '__main__':
     app.run(debug=True)
