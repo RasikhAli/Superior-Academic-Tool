@@ -17,6 +17,8 @@ app = Flask(__name__)
 # Register the CGPA calculator blueprint
 app.register_blueprint(cgpa_bp)
 
+timetable_info = "Fall 2025 - Version 1.8"
+
 # Create required folder structure
 def create_folder_structure():
     folders = ['uploads', 'uploads/csv', 'uploads/xlsx', 'static']
@@ -165,7 +167,8 @@ def index():
         return render_template('index.html', 
                              table_html="<p>No timetable files found. Please upload an xlsx file to uploads/xlsx folder.</p>", 
                              teacher_names=[],
-                             semester_info="No Data")
+                             semester_info="No Data",
+                             timetable_info=timetable_info)
     
     # Check if file has been modified
     current_modified = os.path.getmtime(csv_file)
@@ -182,7 +185,8 @@ def index():
     return render_template('index.html', 
                          table_html=table_html, 
                          teacher_names=sorted_teachers,
-                         semester_info=semester_info)
+                         semester_info=semester_info,
+                         timetable_info=timetable_info)
 
 def parse_multiple_teachers(teachers_str):
     """Parse multiple teachers from a string like 'Mr. John Mr. Jane Dr. Smith'"""
