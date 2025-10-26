@@ -17,15 +17,15 @@ Monday,01:30 - 02:50,Lecture Room # 23,Differential Equations,BSDS-4A & BSAI-4A,
 Monday,02:50 - 04:10,Lecture Room # 23,Computer Vision,BSAI-5A & BSAI-5C,Dr. Iftikhar Naseer
 Monday,04:10 - 05:30,Lecture Room # 23,Computer Vision,BSAI-5A & BSAI-5C,Dr. Iftikhar Naseer
 Monday,05:30 - 06:50,Lecture Room # 23,Software Engineering,BSAI-5C & BSDS-5A,Mr. Abdullah Tanweer
-Monday,8:00 - 9:20,Lecture Room # 24,Discrete Structures,BSAI-1B,Mr. Syed Zeeshan Hussain
-Monday,9:20 - 10:40,Lecture Room # 24,Functional English,BSAI-1B,Ms. Shehnaz
-Monday,10:45 - 12:05,Lecture Room # 24,Application of  Information & Communication Technology (Theory),BSAI-1B,Mr. Philemon Philip
+Monday,9:20 - 10:40,Lecture Room # 24,Discrete Structures,BSAI-1B,Mr. Syed Zeeshan Hussain
+Monday,10:45 - 12:05,Lecture Room # 24,Functional English,BSAI-1B,Ms. Shehnaz
 Monday,12:05 - 01:25,Lecture Room # 24,Application of  Information & Communication Technology (Theory),BSAI-1B,Mr. Philemon Philip
-Monday,01:30 - 02:50,Lecture Room # 24,Computer Networks (Theory),BSAI-5B,Mr. Rafaqat Ali
-Monday,02:50 - 04:10,Lecture Room # 24,Analysis of Algorithms,BSAI-5B,Mr. Nagesh Kumar
+Monday,01:30 - 02:50,Lecture Room # 24,Application of  Information & Communication Technology (Theory),BSAI-1B,Mr. Philemon Philip
+Monday,02:50 - 04:10,Lecture Room # 24,Computer Networks (Theory),BSAI-5B,Mr. Rafaqat Ali
 Monday,04:10 - 05:30,Lecture Room # 24,Software Engineering,BSAI-5B,Mr. Abdullah Tanweer
-Monday,8:00 - 9:20,Lecture Room # 25,Applied Physics (Theory + Lab),BSAI-1C,Dr. Rehman Fazal
-Monday,9:20 - 10:40,Lecture Room # 25,Applied Physics (Theory + Lab),BSAI-1C,Dr. Rehman Fazal
+Monday,05:30 - 06:50,Lecture Room # 24,Analysis of Algorithms,BSAI-5B,Mr. Nagesh Kumar
+Monday,8:00 - 9:20,Lecture Room # 25,Functional English,BSSE-1C,Ms. Shehnaz
+Monday,9:20 - 10:40,Lecture Room # 25,Discrete Structures,BSSE-1C,Ms. Aimen Fatima
 Monday,10:45 - 12:35,Lecture Room # 25,Ideology and Constitution of Pakistan,BSSE-1B,Mr. Muhammad Abubakar
 Monday,12:35 - 01:25,Lecture Room # 25,Understanding of Holy Quran,BSSE-1B,Mr. Muhammad Abubakar
 Monday,01:30 - 02:50,Lecture Room # 25,Software Engineering,BSSE-3C,Mr. Sawail Khan
@@ -55,9 +55,9 @@ Monday,12:05 - 01:25,Lecture Room # 28,Applied Physics (Theory + Lab),BSSE-1C,Dr
 Monday,01:30 - 02:50,Lecture Room # 28,Applied Physics (Theory + Lab),BSSE-1C,Dr. Rehman Fazal
 Monday,02:50 - 04:10,Lecture Room # 28,Artificial Intelligence,BSSE-5D,Ms. Asma Abubakar
 Monday,04:10 - 05:30,Lecture Room # 28,Data Mining,BSSE-5D,Mr. Hammad Ghulam Mustafa
-Monday,8:00 - 9:20,Lecture Room # 29,Functional English,BSSE-1C,Ms. Shehnaz
-Monday,9:20 - 10:40,Lecture Room # 29,Discrete Structures,BSSE-1C,Ms. Aimen Fatima
-Monday,10:45 - 12:05,Lecture Room # 29,Discrete Structures,BSAI-1C,Mr. Syed Zeeshan Hussain
+Monday,8:00 - 9:20,Lecture Room # 29,Discrete Structures,BSAI-1C,Mr. Syed Zeeshan Hussain
+Monday,9:20 - 10:40,Lecture Room # 29,Applied Physics (Theory + Lab),BSAI-1C,Dr. Rehman Fazal
+Monday,10:45 - 12:05,Lecture Room # 29,Applied Physics (Theory + Lab),BSAI-1C,Dr. Rehman Fazal
 Monday,12:05 - 01:25,Lecture Room # 29,Software Engineering,BSAI-3B,Mr. Syed Zeeshan Hussain
 Monday,01:30 - 02:50,Lecture Room # 29,Leading with Character,BSAI-1E,Mr. Muhammad Sohail Irshad
 Monday,02:50 - 04:10,Lecture Room # 29,Leading with Character,BSAI-1E,Mr. Muhammad Sohail Irshad
@@ -77,8 +77,8 @@ Monday,01:30 - 02:50,Computer Lab-7,Application of Information & Communication T
 Monday,02:50 - 04:10,Computer Lab-7,Application of Information & Communication Technology (Lab),BSAI-1D,Ms. Momna Naseem
 Monday,04:10 - 05:30,Computer Lab-7,Advance Computer Programming (Theory),BSSE-4A,Mr. Muhammad Aqib
 Monday,05:30 - 06:50,Computer Lab-7,Advance Computer Programming (Theory),BSSE-4A,Mr. Muhammad Aqib
-Monday,8:00 - 9:20,Computer Lab-8,Application of Information & Communication Technology (Theory),BSSE-1A,Ms. Asma Abubakar
-Monday,9:20 - 10:40,Computer Lab-8,Application of Information & Communication Technology (Theory),BSSE-1A,Ms. Asma Abubakar
+Monday,8:00 - 9:20,Computer Lab-8,Applied Physics (Theory + Lab),BSSE-1A,Mr. Muhammad Nouman
+Monday,9:20 - 10:40,Computer Lab-8,Applied Physics (Theory + Lab),BSSE-1A,Mr. Muhammad Nouman
 Monday,10:45 - 12:05,Computer Lab-8,Application of  Information & Communication Technology (Lab),BSSE-1A,Mr. Muhammad Usman Khan
 Monday,12:05 - 01:25,Computer Lab-8,Application of  Information & Communication Technology (Lab),BSSE-1A,Mr. Muhammad Usman Khan
 Monday,01:30 - 02:50,Computer Lab-8,Application of  Information & Communication Technology (Lab),BSDS-1A,Mr. Muhammad Usman Khan
@@ -124,8 +124,8 @@ Tuesday,01:30 - 02:50,Lecture Room # 24,Data Structures & Algorithms (Theory),BS
 Tuesday,02:50 - 04:10,Lecture Room # 24,Computer Networks (Theory),BSSE-5C,Ms. Musharraffa Rafiq
 Tuesday,04:10 - 05:30,Lecture Room # 24,Database Systems (Theory),BSDS-4A & BSAI-4A,Mr. Ahmed Hassan
 Tuesday,05:30 - 06:50,Lecture Room # 24,Database Systems (Theory),BSDS-4A & BSAI-4A,Mr. Ahmed Hassan
-Tuesday,8:00 - 9:20,Lecture Room # 25,Applied Physics (Theory + Lab),BSSE-1D,Dr. Rehman Fazal
-Tuesday,9:20 - 10:40,Lecture Room # 25,Applied Physics (Theory + Lab),BSSE-1D,Dr. Rehman Fazal
+Tuesday,8:00 - 9:20,Lecture Room # 25,Expository Writing,BSSE-2A,Mr. Abdul Moiz
+Tuesday,9:20 - 10:40,Lecture Room # 25,Expository Writing,BSSE-2A,Mr. Abdul Moiz
 Tuesday,10:45 - 12:05,Lecture Room # 25,Application of Information & Communication Technology (Theory),BSSE-1E,Mr. Nagesh Kumar
 Tuesday,12:05 - 01:25,Lecture Room # 25,Application of Information & Communication Technology (Theory),BSSE-1E,Mr. Nagesh Kumar
 Tuesday,01:30 - 02:50,Lecture Room # 25,Probability & Statistics,BSSE-4A,Mr. Hamza Hameed
@@ -148,8 +148,8 @@ Tuesday,15:10 - 04:10,Lecture Room # 27,Understanding of Holy Quran,BSAI-1D,Ms. 
 Tuesday,04:10 - 05:30,Lecture Room # 27,Data Structures & Algorithms (Theory),BSAI-3B,Dr. Hafiz Muhammad Tayyab Khushi
 Tuesday,8:00 - 9:20,Lecture Room # 28,Data Structures & Algorithms (Theory),BSSE-3A,Ms. Aimen Fatima
 Tuesday,9:20 - 10:40,Lecture Room # 28,Software Engineering,BSSE-3A,Mr. Abdullah Tanweer
-Tuesday,10:45 - 12:05,Lecture Room # 28,Expository Writing,BSSE-2A,Mr. Abdul Moiz
-Tuesday,12:05 - 01:25,Lecture Room # 28,Expository Writing,BSSE-2A,Mr. Abdul Moiz
+Tuesday,10:45 - 12:05,Lecture Room # 28,Applied Physics (Theory + Lab),BSSE-1D,Dr. Rehman Fazal
+Tuesday,12:05 - 01:25,Lecture Room # 28,Applied Physics (Theory + Lab),BSSE-1D,Dr. Rehman Fazal
 Tuesday,01:30 - 02:50,Lecture Room # 28,Discrete Structures,BSAI-1E,Mr. Rafaqat Ali
 Tuesday,02:50 - 04:10,Lecture Room # 28,Computer Networks (Theory),BSSE-5D,Mr. Rafaqat Ali
 Tuesday,04:10 - 05:30,Lecture Room # 28,Data Mining,BSSE-5D,Mr. Hammad Ghulam Mustafa
@@ -160,8 +160,8 @@ Tuesday,12:05 - 01:25,Lecture Room # 29,Pre Algebra,BSSE-2A & BSDS-2A & BSAI-2A,
 Tuesday,01:30 - 02:50,Lecture Room # 29,Computer Organization & Assembly Language (Theory),BSDS-6A & BSAI-6A,Ms. Musharraffa Rafiq
 Tuesday,02:50 - 04:10,Lecture Room # 29,Software Construction & Development,BSDS-6A & BSAI-6A,Mr. Muhammad Aqib
 Tuesday,04:10 - 05:30,Lecture Room # 29,Software Construction & Development,BSDS-6A & BSAI-6A,Mr. Muhammad Aqib
-Tuesday,8:00 - 9:20,Lecture Room # 30,Applied Physics (Theory + Lab),BSSE-1A,Mr. Muhammad Nouman
-Tuesday,9:20 - 10:40,Lecture Room # 30,Applied Physics (Theory + Lab),BSSE-1A,Mr. Muhammad Nouman
+Tuesday,8:00 - 9:20,Lecture Room # 30,Application of Information & Communication Technology (Theory),BSSE-1A,Dr. Hafiz Muhammad Tayyab Khushi
+Tuesday,9:20 - 10:40,Lecture Room # 30,Application of Information & Communication Technology (Theory),BSSE-1A,Dr. Hafiz Muhammad Tayyab Khushi
 Tuesday,04:10 - 05:30,Lecture Room # 30,Programming Fundamentals (Theory),BSDS-2A & BSAI-2A,Dr. Iftikhar Naseer
 Tuesday,05:30 - 06:50,Lecture Room # 30,Programming Fundamentals (Theory),BSDS-2A & BSAI-2A,Dr. Iftikhar Naseer
 Tuesday,8:00 - 9:20,Computer Lab-7,Functional English,BSSE-1B,Ms. Shehnaz
@@ -213,7 +213,7 @@ Wednesday,9:20 - 10:40,Lecture Room # 24,Leading with Character,BSSE-1A,Dr. Hafi
 Wednesday,10:45 - 12:35,Lecture Room # 24,Ideology and Constitution of Pakistan,BSSE-1A,Ms. Namra Amjad
 Wednesday,12:35 - 01:25,Lecture Room # 24,Understanding of Holy Quran,BSSE-1A,Ms. Namra Amjad
 Wednesday,01:30 - 02:50,Lecture Room # 24,Functional English,BSSE-1D,Ms. Shehnaz
-Wednesday,02:50 - 04:10,Lecture Room # 24,Discrete Structures,BSSE-1D,Ms. Aimen Fatima
+Wednesday,02:50 - 04:10,Lecture Room # 24,Discrete Structures,BSSE-1D,Dr. Hafiz Muhammad Tayyab Khushi
 Wednesday,04:10 - 05:30,Lecture Room # 24,Multivariable Calculus,BSAI-3A,Mr. Muhammad Hamza
 Wednesday,05:30 - 06:50,Lecture Room # 24,Multivariable Calculus,BSAI-3A,Mr. Muhammad Hamza
 Wednesday,8:00 - 9:20,Lecture Room # 25,Database Systems (Theory),BSSE-3E,Dr. Ayesha Karim
@@ -288,8 +288,8 @@ Wednesday,12:05 - 01:25,Auditorium (SE),Database Systems (Lab),BSSE-3D,Ms. Iqra 
 Wednesday,01:30 - 03:30,Auditorium (SE),Ideology and Constitution of Pakistan,BSAI-3B,Mr. Muhammad Abubakar
 Wednesday,01:30 - 03:30,Auditorium (SE),Ideology and Constitution of Pakistan,BSAI-3B,Mr. Muhammad Abubakar
 Wednesday,03:30 - 05:30,Auditorium (SE),Ideology and Constitution of Pakistan,BSAI-3C,Mr. Muhammad Abubakar
-Thursday,8:00 - 9:20,Lecture Room # 09,Computer Networks (Theory),BSAI-5A,Mr. Rafaqat Ali
-Thursday,9:20 - 10:40,Lecture Room # 09,Analysis of Algorithms,BSAI-5A,Mr. Nagesh Kumar
+Thursday,8:00 - 9:20,Lecture Room # 09,Probability & Statistics,BSSE-2A,Ms. Aniqa Yousaf
+Thursday,9:20 - 10:40,Lecture Room # 09,Calculus & Analytical Geometry,BSSE-2A,Ms. Aniqa Yousaf
 Thursday,8:00 - 9:20,Lecture Room # 22,Database Systems (Lab),BSSE-3E,Ms. Iqra Saddique
 Thursday,9:20 - 10:40,Lecture Room # 22,Database Systems (Lab),BSSE-3E,Ms. Iqra Saddique
 Thursday,10:45 - 12:05,Lecture Room # 22,Software Engineering,BSAI-3C,Mr. Syed Zeeshan Hussain
@@ -321,16 +321,14 @@ Thursday,01:30 - 02:50,Lecture Room # 25,Data Structures & Algorithms (Theory),B
 Thursday,02:50 - 04:10,Lecture Room # 25,Database Systems (Theory),BSSE-3D,Ms. Asma Abubakar
 Thursday,04:10 - 05:30,Lecture Room # 25,Multivariable Calculus,BSSE-3B,Mr. Usama
 Thursday,05:30 - 06:50,Lecture Room # 25,Multivariable Calculus,BSSE-3B,Mr. Usama
-Thursday,8:00 - 9:20,Lecture Room # 26,Probability & Statistics,BSSE-2A,Ms. Aniqa Yousaf
-Thursday,9:20 - 10:40,Lecture Room # 26,Calculus & Analytical Geometry,BSSE-2A,Ms. Aniqa Yousaf
-Thursday,10:45 - 12:05,Lecture Room # 26,Software Engineering,BSSE-3A,Mr. Abdullah Tanweer
-Thursday,12:05 - 01:25,Lecture Room # 26,Database Systems (Theory),BSSE-3A,Ms. Asma Abubakar
+Thursday,9:20 - 10:40,Lecture Room # 26,Computer Networks (Theory),BSAI-5A,Mr. Rafaqat Ali
+Thursday,10:45 - 12:05,Lecture Room # 26,Analysis of Algorithms,BSAI-5A,Mr. Nagesh Kumar
 Thursday,01:30 - 02:50,Lecture Room # 26,Discrete Structures,BSSE-1E,Dr. Arfan
 Thursday,02:50 - 04:10,Lecture Room # 26,Discrete Structures,BSSE-1E,Dr. Arfan
 Thursday,04:10 - 05:30,Lecture Room # 26,Web Engineering,BSSE-5D,Mr. Hafiz Ali Ahmed
 Thursday,05:30 - 06:50,Lecture Room # 26,Web Engineering,BSSE-5D,Mr. Hafiz Ali Ahmed
-Thursday,8:00 - 9:20,Lecture Room # 27,Applied Physics (Theory + Lab),BSSE-1B,Dr. Rehman Fazal
-Thursday,9:20 - 10:40,Lecture Room # 27,Applied Physics (Theory + Lab),BSSE-1B,Dr. Rehman Fazal
+Thursday,8:00 - 9:20,Lecture Room # 27,Database Systems (Theory),BSSE-3A,Ms. Asma Abubakar
+Thursday,9:20 - 10:40,Lecture Room # 27,Software Engineering,BSSE-3A,Mr. Abdullah Tanweer
 Thursday,10:45 - 12:05,Lecture Room # 27,Discrete Structures,BSSE-1B,Mr. Hammad Ghulam Mustafa
 Thursday,12:05 - 01:25,Lecture Room # 27,Functional English,BSSE-1B,Ms. Shehnaz
 Thursday,01:30 - 02:50,Lecture Room # 27,Computer Networks (Theory),BSSE-5A,Mr. Rafaqat Ali
@@ -349,8 +347,8 @@ Thursday,8:00 - 9:20,Lecture Room # 29,Discrete Structures,BSSE-1A,Dr. Arfan
 Thursday,9:20 - 10:40,Lecture Room # 29,Functional English,BSSE-1A,Mr. Rehan
 Thursday,10:45 - 12:05,Lecture Room # 29,Functional English,BSAI-1D,Mr. Abdul Moiz
 Thursday,12:05 - 01:25,Lecture Room # 29,Expository Writing,BSDS-2A & BSAI-2A,Mr. Abdul Moiz
-Thursday,01:30 - 02:50,Lecture Room # 29,Analysis of Algorithms,BSAI-5C & BSDS-5A,Mr. Nagesh Kumar
-Thursday,02:50 - 04:10,Lecture Room # 29,Analysis of Algorithms,BSAI-5C & BSDS-5A,Mr. Nagesh Kumar
+Thursday,01:30 - 02:50,Lecture Room # 29,Applied Physics (Theory + Lab),BSSE-1B,Dr. Rehman Fazal
+Thursday,02:50 - 04:10,Lecture Room # 29,Applied Physics (Theory + Lab),BSSE-1B,Dr. Rehman Fazal
 Thursday,04:10 - 05:30,Lecture Room # 29,Data Mining,BSDS-6A & BSAI-6A,Dr. Iftikhar Naseer
 Thursday,05:30 - 06:50,Lecture Room # 29,Data Mining,BSDS-6A & BSAI-6A,Dr. Iftikhar Naseer
 Thursday,08:00 - 10:00,Lecture Room # 30,Application of Information & Communication Technology (Theory),BSAI-1D,Ms. Salwa Batool
@@ -384,7 +382,7 @@ Thursday,09:40 - 10:45,Auditorium (SE),Understanding of Holy Quran,BSAI-1C,Dr. Z
 Thursday,10:45 - 12:05,Auditorium (SE),Database Systems (Theory),BSSE-3C,Ms. Asma Abubakar
 Thursday,12:05 - 01:25,Auditorium (SE),Data Structures & Algorithms (Theory),BSSE-3C,Ms. Aimen Fatima
 Thursday,01:30 - 02:50,Auditorium (SE),Functional English,BSSE-1D,Ms. Shehnaz
-Thursday,02:50 - 04:10,Auditorium (SE),Discrete Structures,BSSE-1D,Ms. Aimen Fatima
+Thursday,02:50 - 04:10,Auditorium (SE),Discrete Structures,BSSE-1D,Dr. Hafiz Muhammad Tayyab Khushi
 Thursday,04:10 - 05:30,Auditorium (SE),Software Engineering,BSAI-5B,Mr. Abdullah Tanweer
 Friday,10:30 - 11:45,Main Auditorium,Leading with Character,BSDS-1A,Ms. Afshan Hameed
 Friday,11:45 - 01:00,Main Auditorium,Leading with Character,BSDS-1A,Ms. Afshan Hameed
@@ -396,8 +394,8 @@ Friday,09:15 - 10:30,Lecture Room # 09,Data Mining,BSSE-5A,Mr. Hammad Ghulam Mus
 Friday,Jumma Prayer,Lecture Room # 09,Jumma Prayer,,
 Friday,8:00 - 09:15,Lecture Room # 22,Applied Physics (Theory + Lab),BSAI-1A,Mr. Muhammad Nouman
 Friday,09:15 - 10:30,Lecture Room # 22,Applied Physics (Theory + Lab),BSAI-1A,Mr. Muhammad Nouman
-Friday,10:30 - 11:45,Lecture Room # 22,Software Engineering,BSDS-3A,Mr. Syed Zeeshan Hussain
-Friday,11:45 - 01:00,Lecture Room # 22,Software Engineering,BSDS-3A,Mr. Syed Zeeshan Hussain
+Friday,10:30 - 11:45,Lecture Room # 22,Artificial Intelligence (Theory),BSAI-3B,Dr. Hafiz Muhammad Shahzad
+Friday,11:45 - 01:00,Lecture Room # 22,Artificial Intelligence (Theory),BSAI-3B,Dr. Hafiz Muhammad Shahzad
 Friday,Jumma Prayer,Lecture Room # 22,Jumma Prayer,,
 Friday,02:00 - 03:15,Lecture Room # 22,Pre Calculus,BSAI-1Combined & BSDS-1Combined,Mr. Muhammad Ilyas
 Friday,03:15 - 04:30,Lecture Room # 22,Pre Calculus,BSAI-1Combined & BSDS-1Combined,Mr. Muhammad Ilyas
@@ -415,8 +413,8 @@ Friday,11:45 - 01:00,Lecture Room # 24,Discrete Structures,BSSE-1A,Dr. Arfan
 Friday,Jumma Prayer,Lecture Room # 24,Jumma Prayer,,
 Friday,02:00 - 03:15,Lecture Room # 24,Foreign Language,BSSE-6A,Dr. Abdul Waheed
 Friday,03:15 - 04:30,Lecture Room # 24,Foreign Language,BSSE-6A,Dr. Abdul Waheed
-Friday,8:00 - 09:15,Lecture Room # 25,Artificial Intelligence (Theory),BSAI-3B,Dr. Hafiz Muhammad Shahzad
-Friday,09:15 - 10:30,Lecture Room # 25,Artificial Intelligence (Theory),BSAI-3B,Dr. Hafiz Muhammad Shahzad
+Friday,8:00 - 09:15,Lecture Room # 25,Software Engineering,BSDS-3A,Mr. Syed Zeeshan Hussain
+Friday,09:15 - 10:30,Lecture Room # 25,Software Engineering,BSDS-3A,Mr. Syed Zeeshan Hussain
 Friday,10:30 - 11:45,Lecture Room # 25,Artifiicial Intelligence,BSSE-5C,Dr. Tehreem Masood
 Friday,11:45 - 01:00,Lecture Room # 25,Artifiicial Intelligence,BSSE-5C,Dr. Tehreem Masood
 Friday,Jumma Prayer,Lecture Room # 25,Jumma Prayer,,
@@ -436,6 +434,7 @@ Friday,12:00 - 13:00,Lecture Room # 27,Understanding of Holy Quran,BSAI-1B,Ms. N
 Friday,Jumma Prayer,Lecture Room # 27,Jumma Prayer,,
 Friday,02:00 - 03:15,Lecture Room # 27,Freelancing,BSSE-7B,Mr. Nagesh Kumar
 Friday,03:15 - 04:30,Lecture Room # 27,Freelancing,BSSE-7B,Mr. Nagesh Kumar
+Friday,04:30 - 06:50,Lecture Room # 27,Analysis of Algorithms,BSAI-5C & BSDS-5A,Mr. Nagesh Kumar
 Friday,08:00 - 09:30,Lecture Room # 28,Ideology and Constitution of Pakistan,BSSE-1D,Dr. M. Mohsin
 Friday,09:30 - 10:30,Lecture Room # 28,Understanding of Holy Quran,BSSE-1D,Dr. M. Mohsin
 Friday,10:30 - 11:45,Lecture Room # 28,Data Structures & Algorithms (Theory),BSSE-3A,Ms. Aimen Fatima
@@ -477,6 +476,13 @@ Friday,11:45 - 01:00,Computer Lab-10,Programming for Artificial Intelligence (La
 Friday,Jumma Prayer,Computer Lab-10,Jumma Prayer,,
 Friday,02:00 - 03:15,Computer Lab-10,Data Warehousing & Business Intelligence,BSDS-8A,Mr. Syed Zeeshan Hussain
 Friday,03:15 - 04:30,Computer Lab-10,Data Warehousing & Business Intelligence,BSDS-8A,Mr. Syed Zeeshan Hussain
+Friday,08:30 - 10:30,Auditorium (SE),Ideology and Constitution of Pakistan,BSSE-3A,Dr. Zarmina Hafeez
+Friday,08:30 - 10:30,Auditorium (SE),Ideology and Constitution of Pakistan,BSSE-3A,Dr. Zarmina Hafeez
+Friday,10:30 - 12:30,Auditorium (SE),Ideology and Constitution of Pakistan,BSSE-3B,Dr. Zarmina Hafeez
+Friday,10:30 - 12:30,Auditorium (SE),Ideology and Constitution of Pakistan,BSSE-3B,Dr. Zarmina Hafeez
+Friday,Jumma Prayer,Auditorium (SE),Jumma Prayer,,
+Friday,02:00 - 04:00,Auditorium (SE),Ideology of Pakistan Ideology and Constitution of Pakistan,BSSE-3C,Dr. Zarmina Hafeez
+Friday,02:00 - 04:00,Auditorium (SE),Ideology of Pakistan Ideology and Constitution of Pakistan,BSSE-3C,Dr. Zarmina Hafeez
 Saturday,09:00 - 11:40,Lecture Room # 25,Software Construction & Development,BSSE-7A,Ms. Irum Fatima
 Saturday,11:40 - 02:20,Lecture Room # 25,Information Security,BSSE-7A,Mr. Umair Iftikhar
 Saturday,09:00 - 11:40,Lecture Room # 26,Information Security,BSSE-7B,Mr. Umair Iftikhar

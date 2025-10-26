@@ -17,7 +17,7 @@ app = Flask(__name__)
 # Register the CGPA calculator blueprint
 app.register_blueprint(cgpa_bp)
 
-timetable_info = "Fall 2025 - Version 1.8"
+timetable_info = "Fall 2025 - Version 1.9"
 
 # Create required folder structure
 def create_folder_structure():

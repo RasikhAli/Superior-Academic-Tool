@@ -45,11 +45,11 @@ def convert_xlsx_to_csv(input_filename, output_filename=None):
 
     # Define layout structure with worksheet information
     day_blocks = [
-        {"day_cell": "B6", "room_rows": range(7, 22), "time_row": 5, "sheet_index": 0, "time_cols": range(4, 12)},  # D to K
-        {"day_cell": "B22", "room_rows": range(24, 38), "time_row": 23, "sheet_index": 0, "time_cols": range(4, 12)},
-        {"day_cell": "B38", "room_rows": range(40, 55), "time_row": 39, "sheet_index": 0, "time_cols": range(4, 12)},
-        {"day_cell": "B55", "room_rows": range(57, 71), "time_row": 56, "sheet_index": 0, "time_cols": range(4, 12)},
-        {"day_cell": "B71", "room_rows": range(73, 88), "time_row": 72, "sheet_index": 0, "time_cols": range(4, 12)},
+        {"day_cell": "B6", "room_rows": range(7, 21), "time_row": 5, "sheet_index": 0, "time_cols": range(4, 12)},  # D to K
+        {"day_cell": "B21", "room_rows": range(23, 37), "time_row": 22, "sheet_index": 0, "time_cols": range(4, 12)},
+        {"day_cell": "B37", "room_rows": range(39, 54), "time_row": 38, "sheet_index": 0, "time_cols": range(4, 12)},
+        {"day_cell": "B54", "room_rows": range(56, 70), "time_row": 55, "sheet_index": 0, "time_cols": range(4, 12)},
+        {"day_cell": "B70", "room_rows": range(72, 88), "time_row": 71, "sheet_index": 0, "time_cols": range(4, 12)},
         {"day_cell": "B1", "room_rows": range(3, 10), "time_row": 2, "sheet_index": 1, "time_cols": range(4, 8)},  # D to G
         {"day_cell": "B10", "room_rows": range(12, 17), "time_row": 11, "sheet_index": 1, "time_cols": range(4, 8)},  # D to G
     ]
