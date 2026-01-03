@@ -37,7 +37,12 @@ def generate_image(name, color_top, color_bottom, alpha=10.0, shadow_angle=45):
     try:
         font = ImageFont.truetype("arial.ttf", 72)
     except IOError:
-        font = ImageFont.load_default()
+        try:
+            # Try to load a larger default font
+            font = ImageFont.truetype("arialbd.ttf", 72)
+        except IOError:
+            # Fallback to default (will be small)
+            font = ImageFont.load_default()
 
     # Split text into lines for multiline support
     lines = name.split('\n')

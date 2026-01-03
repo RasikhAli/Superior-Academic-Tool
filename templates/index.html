@@ -600,20 +600,6 @@
         document.getElementById('shadowtext-angle-value').textContent = this.value + '°';
     });
 
-    // Auto-generate on input change (debounced)
-    let shadowTextDebounceTimer;
-    const shadowTextInputs = document.querySelectorAll('#shadowtext-form input, #shadowtext-form textarea');
-    shadowTextInputs.forEach(input => {
-        input.addEventListener('input', function() {
-            clearTimeout(shadowTextDebounceTimer);
-            shadowTextDebounceTimer = setTimeout(() => {
-                if (document.getElementById('shadowtext-name').value.trim()) {
-                    generateShadowText();
-                }
-            }, 500);
-        });
-    });
-
     function generateShadowText() {
         const formData = new FormData(document.getElementById('shadowtext-form'));
         const data = {
@@ -659,25 +645,7 @@
         window.location.href = '/shadowtext/crop';
     }
 
-    // Initialize with default generation when section is shown
-    document.addEventListener('DOMContentLoaded', function() {
-        // Generate default image when shadowtext section is first opened
-        const observer = new MutationObserver(function(mutations) {
-            mutations.forEach(function(mutation) {
-                const shadowtextSection = document.getElementById('shadowtext-studio');
-                if (shadowtextSection && shadowtextSection.classList.contains('active') && !shadowTextImageGenerated) {
-                    generateShadowText();
-                    observer.disconnect();
-                }
-            });
-        });
 
-        observer.observe(document.body, {
-            attributes: true,
-            subtree: true,
-            attributeFilter: ['class']
-        });
-    });
     </script>
 </body>
 </html>
