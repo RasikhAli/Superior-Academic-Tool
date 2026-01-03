@@ -9,7 +9,7 @@ shadowtext_bp = Blueprint('shadowtext', __name__,
                           static_folder='ShadowText Studio/static',
                           static_url_path='/shadowtext/static')
 
-def generate_image(name, color_top, color_bottom, alpha=10.0, shadow_angle=45):
+def generate_image(name, color_top, color_bottom, alpha=10.0, shadow_angle=45, font_size=120):
     width, height = 800, 1200
 
     # Convert angle from degrees to radians
@@ -35,11 +35,11 @@ def generate_image(name, color_top, color_bottom, alpha=10.0, shadow_angle=45):
         draw.line([(0, y), (width, y)], fill=(r, g, b, 255))
 
     try:
-        font = ImageFont.truetype("arial.ttf", 72)
+        font = ImageFont.truetype("arial.ttf", font_size)
     except IOError:
         try:
             # Try to load a larger default font
-            font = ImageFont.truetype("arialbd.ttf", 72)
+            font = ImageFont.truetype("arialbd.ttf", font_size)
         except IOError:
             # Fallback to default (will be small)
             font = ImageFont.load_default()
@@ -123,11 +123,12 @@ def generate():
     name = data.get("name", "RASIKH ALI").strip()
     color_top = data.get("color_top", "#8C1F7A")
     color_bottom = data.get("color_bottom", "#DD64C8")
+    font_size = int(data.get("font_size", 120))
     alpha = float(data.get("alpha", 1.0))
     shadow_angle = int(data.get("angle", 45))
-    
-    path = generate_image(name, color_top, color_bottom, alpha, shadow_angle)
-    
+
+    path = generate_image(name, color_top, color_bottom, alpha, shadow_angle, font_size)
+
     # Return path relative to the blueprint's static folder
     return jsonify({"image_path": "/static/generated.png"})
 

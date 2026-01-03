@@ -355,6 +355,13 @@
                                 </div>
 
                                 <div class="slider-group">
+                                    <label for="shadowtext-font-size">
+                                        Font Size: <span id="shadowtext-font-size-value" style="color: #4a90e2; font-weight: 700;">120</span>
+                                    </label>
+                                    <input id="shadowtext-font-size" name="font_size" type="range" min="40" max="250" step="5" value="120" />
+                                </div>
+
+                                <div class="slider-group">
                                     <label for="shadowtext-alpha">
                                         Shadow Intensity: <span id="shadowtext-alpha-value" style="color: #4a90e2; font-weight: 700;">1.0</span>
                                     </label>
@@ -590,6 +597,11 @@
     // ShadowText Studio JavaScript
     let shadowTextImageGenerated = false;
 
+    // Update font size value display
+    document.getElementById('shadowtext-font-size').addEventListener('input', function() {
+        document.getElementById('shadowtext-font-size-value').textContent = this.value;
+    });
+
     // Update alpha value display
     document.getElementById('shadowtext-alpha').addEventListener('input', function() {
         document.getElementById('shadowtext-alpha-value').textContent = this.value;
@@ -606,6 +618,7 @@
             name: formData.get('name') || 'RASIKH ALI',
             color_top: formData.get('color_top'),
             color_bottom: formData.get('color_bottom'),
+            font_size: formData.get('font_size'),
             alpha: formData.get('alpha'),
             angle: formData.get('angle')
         };
