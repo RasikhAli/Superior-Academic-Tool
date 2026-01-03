@@ -17,7 +17,7 @@ app = Flask(__name__)
 # Register the CGPA calculator blueprint
 app.register_blueprint(cgpa_bp)
 
-timetable_info = "Fall 2025 - Version 1.10"
+timetable_info = "Fall 2025 - Version 1.10"  # Default fallback
 
 # Create required folder structure
 def create_folder_structure():
@@ -106,6 +106,53 @@ def extract_semester_info(filename):
         return f"{season}-{year}"
     return "Current Semester"
 
+def extract_timetable_info(filename):
+    """
+    Extract timetable info from filename
+    Example: "Timetable SE Department (Fall-25 & Spring-26) Version-1.0.xlsx"
+    Returns: "Fall 2025 & Spring 2026 - Version 1.0"
+    """
+    # Extract the base filename without path and extension
+    base_filename = os.path.basename(filename)
+    base_filename = os.path.splitext(base_filename)[0]
+
+    # Pattern to match semester info like "Fall-25", "Spring-26", etc.
+    # This will capture multiple semesters separated by &
+    semester_pattern = r'((?:Fall|Spring|Summer)-\d{2}(?:\s*&\s*(?:Fall|Spring|Summer)-\d{2})*)'
+    semester_match = re.search(semester_pattern, base_filename, re.IGNORECASE)
+
+    # Pattern to match version info like "Version-1.0", "Version 1.0", "v1.0", etc.
+    version_pattern = r'(?:Version|Ver|v)[\s-]*(\d+\.\d+)'
+    version_match = re.search(version_pattern, base_filename, re.IGNORECASE)
+
+    result_parts = []
+
+    if semester_match:
+        semester_str = semester_match.group(1)
+        # Convert "Fall-25 & Spring-26" to "Fall 2025 & Spring 2026"
+        def expand_semester(match):
+            season = match.group(1)
+            year = match.group(2)
+            full_year = f"20{year}"
+            return f"{season} {full_year}"
+
+        expanded_semester = re.sub(
+            r'(Fall|Spring|Summer)-(\d{2})',
+            expand_semester,
+            semester_str,
+            flags=re.IGNORECASE
+        )
+        result_parts.append(expanded_semester)
+
+    if version_match:
+        version = version_match.group(1)
+        result_parts.append(f"Version {version}")
+
+    if result_parts:
+        return " - ".join(result_parts)
+
+    return "Fall 2025 - Version 1.10"  # Default fallback
+
 @app.route('/timetable')
 def get_timetable():
     name = request.args.get('name', '').upper()
@@ -158,32 +205,37 @@ def get_sections():
 
 @app.route('/')
 def index():
-    global last_modified
-    
+    global last_modified, timetable_info
+
     # Get current CSV file (will convert if needed)
     csv_file = get_current_csv_file()
-    
+
     if not csv_file or not os.path.exists(csv_file):
-        return render_template('index.html', 
-                             table_html="<p>No timetable files found. Please upload an xlsx file to uploads/xlsx folder.</p>", 
+        return render_template('index.html',
+                             table_html="<p>No timetable files found. Please upload an xlsx file to uploads/xlsx folder.</p>",
                              teacher_names=[],
                              semester_info="No Data",
                              timetable_info=timetable_info)
-    
+
     # Check if file has been modified
     current_modified = os.path.getmtime(csv_file)
     if last_modified != current_modified:
         process_file(csv_file)
         last_modified = current_modified
-    
+
     # Extract semester info from filename
     semester_info = extract_semester_info(csv_file)
-    
+
+    # Extract timetable info from the xlsx filename (not csv)
+    latest_xlsx = get_latest_xlsx_file()
+    if latest_xlsx:
+        timetable_info = extract_timetable_info(latest_xlsx)
+
     table_html = generate_cards_html()
     sorted_teachers = sort_teachers_by_prefix_and_name(teacher_names)
-    
-    return render_template('index.html', 
-                         table_html=table_html, 
+
+    return render_template('index.html',
+                         table_html=table_html,
                          teacher_names=sorted_teachers,
                          semester_info=semester_info,
                          timetable_info=timetable_info)
@@ -577,4 +629,4 @@ def download_section_by_semester(semester):
     )
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, port=5005)

@@ -45,13 +45,13 @@ def convert_xlsx_to_csv(input_filename, output_filename=None):
 
     # Define layout structure with worksheet information
     day_blocks = [
-        {"day_cell": "B6", "room_rows": range(7, 21), "time_row": 5, "sheet_index": 0, "time_cols": range(4, 12)},  # D to K
-        {"day_cell": "B21", "room_rows": range(23, 37), "time_row": 22, "sheet_index": 0, "time_cols": range(4, 12)},
-        {"day_cell": "B37", "room_rows": range(39, 54), "time_row": 38, "sheet_index": 0, "time_cols": range(4, 12)},
-        {"day_cell": "B54", "room_rows": range(56, 70), "time_row": 55, "sheet_index": 0, "time_cols": range(4, 12)},
-        {"day_cell": "B70", "room_rows": range(72, 88), "time_row": 71, "sheet_index": 0, "time_cols": range(4, 12)},
-        {"day_cell": "B1", "room_rows": range(3, 10), "time_row": 2, "sheet_index": 1, "time_cols": range(4, 8)},  # D to G
-        {"day_cell": "B10", "room_rows": range(12, 17), "time_row": 11, "sheet_index": 1, "time_cols": range(4, 8)},  # D to G
+        {"day_cell": "B6", "room_rows": range(7, 20), "time_row": 5, "sheet_index": 0, "time_cols": range(4, 12)},  # D to K
+        {"day_cell": "B20", "room_rows": range(22, 35), "time_row": 21, "sheet_index": 0, "time_cols": range(4, 12)},
+        {"day_cell": "B35", "room_rows": range(37, 51), "time_row": 36, "sheet_index": 0, "time_cols": range(4, 12)},
+        {"day_cell": "B51", "room_rows": range(53, 66), "time_row": 52, "sheet_index": 0, "time_cols": range(4, 12)},
+        {"day_cell": "B66", "room_rows": range(68, 83), "time_row": 67, "sheet_index": 0, "time_cols": range(4, 12)},
+        {"day_cell": "B1", "room_rows": range(3, 14), "time_row": 2, "sheet_index": 1, "time_cols": range(4, 8)},  # D to G
+        {"day_cell": "B14", "room_rows": range(16, 26), "time_row": 15, "sheet_index": 1, "time_cols": range(4, 8)},  # D to G
     ]
 
     def fix_class_group_format(class_group_str):
@@ -148,29 +148,48 @@ def convert_xlsx_to_csv(input_filename, output_filename=None):
                         # Convert "BSDS/BSAI-6A" to "BSDS-6A & BSAI-6A"
                         line = fix_class_group_format(line)
                         groups.append(line)
+                    # Check if this line is just a time slot in parentheses (e.g., "(10:45 am to 12:25 pm)")
+                    elif re.match(r'^\s*\(([^)]+)\)\s*$', line):
+                        timeslot_text = re.match(r'^\s*\(([^)]+)\)\s*$', line).group(1).strip()
+
+                        # Extract time from various formats and convert to 24-hour
+                        time_match = re.search(r'(\d{1,2}:\d{2})\s*(AM|PM)?\s*(?:-|TO|to)\s*(\d{1,2}:\d{2})\s*(AM|PM)?', timeslot_text, re.IGNORECASE)
+                        if time_match:
+                            start_time = time_match.group(1)
+                            start_period = time_match.group(2)
+                            end_time = time_match.group(3)
+                            end_period = time_match.group(4)
+
+                            # Convert to 24-hour format if AM/PM is present
+                            if start_period:
+                                start_time = convert_to_24hour(start_time, start_period)
+                            if end_period:
+                                end_time = convert_to_24hour(end_time, end_period)
+
+                            teacher_timeslot = f"{start_time} - {end_time}"
                     else:
-                        # Detect teacher and timeslot (e.g., "Ms. Namra Amjad (10:45 AM TO 12:25 PM)")
+                        # Detect teacher and timeslot on same line (e.g., "Ms. Namra Amjad (10:45 AM TO 12:25 PM)")
                         match = re.match(r"(.*?)\s*\(([^)]+)\)\s*$", line)
                         if match:
                             teacher_name = match.group(1).strip()
                             timeslot_text = match.group(2).strip()
-                            
+
                             # Extract time from various formats and convert to 24-hour
-                            time_match = re.search(r'(\d{1,2}:\d{2})\s*(AM|PM)?\s*(?:-|TO)\s*(\d{1,2}:\d{2})\s*(AM|PM)?', timeslot_text, re.IGNORECASE)
+                            time_match = re.search(r'(\d{1,2}:\d{2})\s*(AM|PM)?\s*(?:-|TO|to)\s*(\d{1,2}:\d{2})\s*(AM|PM)?', timeslot_text, re.IGNORECASE)
                             if time_match:
                                 start_time = time_match.group(1)
                                 start_period = time_match.group(2)
                                 end_time = time_match.group(3)
                                 end_period = time_match.group(4)
-                                
+
                                 # Convert to 24-hour format if AM/PM is present
                                 if start_period:
                                     start_time = convert_to_24hour(start_time, start_period)
                                 if end_period:
                                     end_time = convert_to_24hour(end_time, end_period)
-                                
+
                                 teacher_timeslot = f"{start_time} - {end_time}"
-                            
+
                             teachers.append(teacher_name)
                         else:
                             # Consider it part of teacher names if not matched with timeslot
