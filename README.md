@@ -110,7 +110,7 @@ python app.py
 6. **Access the dashboard:**
 Open your browser and navigate to:
 ```
-http://127.0.0.1:5005
+http://127.0.0.1:5000
 ```
 
 ## 📖 Usage Guide
@@ -255,11 +255,11 @@ We welcome contributions! Here's how you can help:
 If you see "Address already in use" error:
 ```bash
 # Windows
-netstat -ano | findstr :5005
+netstat -ano | findstr :5000
 taskkill /PID <PID> /F
 
 # macOS/Linux
-lsof -ti:5005 | xargs kill -9
+lsof -ti:5000 | xargs kill -9
 ```
 
 ### XLSX File Not Loading
