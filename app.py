@@ -10,12 +10,16 @@ import sys
 import importlib
 import converter  # Import the converter module
 from cgpa_calculator import cgpa_bp  # Import the CGPA calculator blueprint
+from shadowtext_studio import shadowtext_bp  # Import the ShadowText Studio blueprint
 import pandas as pd
 
 app = Flask(__name__)
 
 # Register the CGPA calculator blueprint
 app.register_blueprint(cgpa_bp)
+
+# Register the ShadowText Studio blueprint
+app.register_blueprint(shadowtext_bp)
 
 timetable_info = "Fall 2025 - Version 1.10"  # Default fallback
 
@@ -97,13 +101,19 @@ def get_current_csv_file():
     return current_csv_file
 
 def extract_semester_info(filename):
-    """Extract semester information from filename"""
-    # Look for patterns like "Fall-24", "Spring-25", etc.
-    match = re.search(r'(Fall|Spring|Summer)-(\d{2})', filename)
+    """
+    Extract semester information from filename
+    Handles both single and multiple semesters
+    Example: "Fall-25 & Spring-26" returns "Fall-25 & Spring-26"
+    """
+    # Pattern to match semester info like "Fall-25", "Spring-26", etc.
+    # This will capture multiple semesters separated by &
+    semester_pattern = r'((?:Fall|Spring|Summer)-\d{2}(?:\s*&\s*(?:Fall|Spring|Summer)-\d{2})*)'
+    match = re.search(semester_pattern, filename, re.IGNORECASE)
+
     if match:
-        season = match.group(1)
-        year = match.group(2)
-        return f"{season}-{year}"
+        return match.group(1)
+
     return "Current Semester"
 
 def extract_timetable_info(filename):
@@ -629,4 +639,4 @@ def download_section_by_semester(semester):
     )
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, port=5005)

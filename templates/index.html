@@ -8,7 +8,11 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-beta.1/css/select2.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+        
+    </style>
 </head>
 <body>
     <!-- Theme Toggle Button -->
@@ -28,6 +32,7 @@
             <li><a href="#" onclick="showSection('teacher-timetable')"><i class="fas fa-chalkboard-teacher"></i> Teacher Timetable</a></li>
             <li><a href="#" onclick="showSection('section-timetable')"><i class="fas fa-users"></i> Section Timetable</a></li>
             <li class="nav-item"><a class="nav-link" href="#" onclick="showSection('cgpa-calculator')"><i class="fas fa-calculator mr-2"></i>CGPA Calculator</a></li>
+            <li class="nav-item"><a class="nav-link" href="#" onclick="showSection('shadowtext-studio')"><i class="fas fa-text-height mr-2"></i>ShadowText Studio</a></li>
             <li><a href="#" onclick="showSection('schedule')"><i class="fas fa-clock"></i> Schedule</a></li>
             <li><a href="#" onclick="showSection('settings')"><i class="fas fa-cog"></i> Settings</a></li>
         </ul>
@@ -135,6 +140,18 @@
                                     <div class="card-count">Academic Tool</div>
                                     <button class="btn btn-success" onclick="showSection('cgpa-calculator')">
                                         <i class="fas fa-calculator mr-2"></i>Calculate
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-4">
+                            <div class="card dashboard-card text-center">
+                                <div class="card-body">
+                                    <i class="fas fa-text-height card-icon"></i>
+                                    <h5 class="card-title">ShadowText Studio</h5>
+                                    <div class="card-count">Design Tool</div>
+                                    <button class="btn btn-primary" onclick="showSection('shadowtext-studio')">
+                                        <i class="fas fa-magic mr-2"></i>Create
                                     </button>
                                 </div>
                             </div>
@@ -296,6 +313,82 @@
                             <h4 class="mt-4">Results</h4>
                             <div id="results" class="mt-3">
                                 <p class="text-muted">Enter marks to see results...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ShadowText Studio Section -->
+            <div id="shadowtext-studio" class="content-section">
+                <div class="content-container">
+                    <h2 class="page-title">
+                        <i class="fas fa-text-height mr-3"></i>ShadowText Studio
+                    </h2>
+
+                    <div class="shadowtext-container">
+                        <!-- Controls Section -->
+                        <div class="shadowtext-controls">
+                            <form id="shadowtext-form">
+                                <div class="form-group mb-4">
+                                    <label for="shadowtext-name" style="font-weight: 600; font-size: 1.1rem; margin-bottom: 0.8rem; display: block;">Your Text</label>
+                                    <textarea
+                                        id="shadowtext-name"
+                                        name="name"
+                                        placeholder="e.g. RASIKH ALI"
+                                        rows="3"
+                                    ></textarea>
+                                </div>
+
+                                <div class="form-group mb-4">
+                                    <label style="font-weight: 600; font-size: 1.1rem; margin-bottom: 1rem; display: block; text-align: center;">Gradient Colors</label>
+                                    <div class="color-row">
+                                        <div class="color-input-group">
+                                            <label for="shadowtext-color-top">Top</label>
+                                            <input id="shadowtext-color-top" name="color_top" type="color" value="#8C1F7A" />
+                                        </div>
+                                        <div class="color-input-group">
+                                            <label for="shadowtext-color-bottom">Bottom</label>
+                                            <input id="shadowtext-color-bottom" name="color_bottom" type="color" value="#DD64C8" />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="slider-group">
+                                    <label for="shadowtext-alpha">
+                                        Shadow Intensity: <span id="shadowtext-alpha-value" style="color: #4a90e2; font-weight: 700;">1.0</span>
+                                    </label>
+                                    <input id="shadowtext-alpha" name="alpha" type="range" min="0" max="100" step="0.1" value="1" />
+                                </div>
+
+                                <div class="slider-group">
+                                    <label for="shadowtext-angle">
+                                        Shadow Angle: <span id="shadowtext-angle-value" style="color: #4a90e2; font-weight: 700;">45°</span>
+                                    </label>
+                                    <input id="shadowtext-angle" name="angle" type="range" min="0" max="360" step="1" value="45" />
+                                </div>
+
+                                <div style="margin-top: 2rem;">
+                                    <button type="button" class="btn-shadowtext btn-primary" onclick="generateShadowText()">
+                                        <i class="fas fa-magic mr-2"></i>Generate Image
+                                    </button>
+
+                                    <button type="button" class="btn-shadowtext btn-success" onclick="downloadShadowText()" id="shadowtext-download-btn" disabled>
+                                        <i class="fas fa-download mr-2"></i>Download Image
+                                    </button>
+
+                                    <button type="button" class="btn-shadowtext btn-info" onclick="cropAndDownloadShadowText()" id="shadowtext-crop-btn" disabled>
+                                        <i class="fas fa-crop mr-2"></i>Crop & Download
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <!-- Preview Section -->
+                        <div class="shadowtext-preview-container">
+                            <h5 class="preview-title">Preview</h5>
+                            <div id="shadowtext-preview" style="width: 100%; display: flex; align-items: center; justify-content: center; flex: 1;">
+                                <p class="preview-placeholder">Enter text and click "Generate Image" to see preview</p>
                             </div>
                         </div>
                     </div>
@@ -492,6 +585,98 @@
             // Initialize the first semester toggle
             togglePreviousSemesterInputs();
         }
+    });
+
+    // ShadowText Studio JavaScript
+    let shadowTextImageGenerated = false;
+
+    // Update alpha value display
+    document.getElementById('shadowtext-alpha').addEventListener('input', function() {
+        document.getElementById('shadowtext-alpha-value').textContent = this.value;
+    });
+
+    // Update angle value display
+    document.getElementById('shadowtext-angle').addEventListener('input', function() {
+        document.getElementById('shadowtext-angle-value').textContent = this.value + '°';
+    });
+
+    // Auto-generate on input change (debounced)
+    let shadowTextDebounceTimer;
+    const shadowTextInputs = document.querySelectorAll('#shadowtext-form input, #shadowtext-form textarea');
+    shadowTextInputs.forEach(input => {
+        input.addEventListener('input', function() {
+            clearTimeout(shadowTextDebounceTimer);
+            shadowTextDebounceTimer = setTimeout(() => {
+                if (document.getElementById('shadowtext-name').value.trim()) {
+                    generateShadowText();
+                }
+            }, 500);
+        });
+    });
+
+    function generateShadowText() {
+        const formData = new FormData(document.getElementById('shadowtext-form'));
+        const data = {
+            name: formData.get('name') || 'RASIKH ALI',
+            color_top: formData.get('color_top'),
+            color_bottom: formData.get('color_bottom'),
+            alpha: formData.get('alpha'),
+            angle: formData.get('angle')
+        };
+
+        fetch('/shadowtext/generate', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        })
+        .then(response => response.json())
+        .then(result => {
+            const preview = document.getElementById('shadowtext-preview');
+            preview.innerHTML = `<img src="${result.image_path}?t=${Date.now()}" alt="Generated shadow text" style="max-width: 58%; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.2);">`;
+            shadowTextImageGenerated = true;
+            document.getElementById('shadowtext-download-btn').disabled = false;
+            document.getElementById('shadowtext-crop-btn').disabled = false;
+        })
+        .catch(error => {
+            console.error('Error generating shadow text:', error);
+            document.getElementById('shadowtext-preview').innerHTML = '<p class="text-danger">Error generating image. Please try again.</p>';
+        });
+    }
+
+    function downloadShadowText() {
+        if (!shadowTextImageGenerated) {
+            alert('Please generate an image first!');
+            return;
+        }
+        window.location.href = '/shadowtext/download';
+    }
+
+    function cropAndDownloadShadowText() {
+        if (!shadowTextImageGenerated) {
+            alert('Please generate an image first!');
+            return;
+        }
+        window.location.href = '/shadowtext/crop';
+    }
+
+    // Initialize with default generation when section is shown
+    document.addEventListener('DOMContentLoaded', function() {
+        // Generate default image when shadowtext section is first opened
+        const observer = new MutationObserver(function(mutations) {
+            mutations.forEach(function(mutation) {
+                const shadowtextSection = document.getElementById('shadowtext-studio');
+                if (shadowtextSection && shadowtextSection.classList.contains('active') && !shadowTextImageGenerated) {
+                    generateShadowText();
+                    observer.disconnect();
+                }
+            });
+        });
+
+        observer.observe(document.body, {
+            attributes: true,
+            subtree: true,
+            attributeFilter: ['class']
+        });
     });
     </script>
 </body>

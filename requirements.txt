@@ -6,3 +6,4 @@ python-dateutil
 pytz
 openpyxl
 gunicorn
+pillow

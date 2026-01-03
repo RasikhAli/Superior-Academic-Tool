@@ -1,9 +1,13 @@
-from flask import Flask, render_template, request, send_file, jsonify
+from flask import Blueprint, render_template, request, send_file, jsonify
 from PIL import Image, ImageDraw, ImageFont
 import os
 import math
 
-app = Flask(__name__)
+# Create a blueprint for ShadowText Studio
+shadowtext_bp = Blueprint('shadowtext', __name__, 
+                          template_folder='ShadowText Studio/templates',
+                          static_folder='ShadowText Studio/static',
+                          static_url_path='/shadowtext/static')
 
 def generate_image(name, color_top, color_bottom, alpha=10.0, shadow_angle=45):
     width, height = 800, 1200
@@ -67,7 +71,6 @@ def generate_image(name, color_top, color_bottom, alpha=10.0, shadow_angle=45):
         y_offset = y_start
         for i, line in enumerate(lines):
             x = (width - line_widths[i]) // 2
-            # shadow_draw.text((x + offset, y_offset + offset), line, font=font, fill=(*shadow_color[:3], shadow_alpha))
             shadow_draw.text((x + int(offset * dx), y_offset + int(offset * dy)), line, font=font, fill=(*shadow_color[:3], shadow_alpha))
             y_offset += line_heights[i] + spacing
 
@@ -83,43 +86,50 @@ def generate_image(name, color_top, color_bottom, alpha=10.0, shadow_angle=45):
         y_offset += line_heights[i] + spacing
 
     final_image = image.convert("RGB")
+    
+    # Ensure the static folder exists
+    os.makedirs('static', exist_ok=True)
+    
     output_path = "static/generated.png"
     final_image.save(output_path, "PNG", optimize=True)
 
     return output_path
 
 
-@app.route("/", methods=["GET", "POST"])
+@shadowtext_bp.route('/shadowtext')
 def index():
-    # Since no longer need POST form submission, just serve the page with defaults
-    return render_template("index.html", image_path=None, theme="dark")
+    """Main page for ShadowText Studio"""
+    return render_template('shadowtext_index.html', image_path=None, theme="dark")
 
 
-
-@app.route("/download")
+@shadowtext_bp.route('/shadowtext/download')
 def download():
+    """Download the generated image"""
     path = "static/generated.png"
     if os.path.exists(path):
         return send_file(path, as_attachment=True)
     return "No image to download.", 404
 
 
-@app.route("/generate", methods=["POST"])
+@shadowtext_bp.route('/shadowtext/generate', methods=['POST'])
 def generate():
+    """Generate the shadow text image"""
     data = request.get_json()
     name = data.get("name", "RASIKH ALI").strip()
     color_top = data.get("color_top", "#8C1F7A")
     color_bottom = data.get("color_bottom", "#DD64C8")
     alpha = float(data.get("alpha", 1.0))
-    # modify generate_image to accept alpha parameter for shadow transparency
-    # path = generate_image(name, color_top, color_bottom, alpha)
-    
     shadow_angle = int(data.get("angle", 45))
+    
     path = generate_image(name, color_top, color_bottom, alpha, shadow_angle)
-    return jsonify({"image_path": "/" + path})
+    
+    # Return path relative to the blueprint's static folder
+    return jsonify({"image_path": "/static/generated.png"})
 
-@app.route("/Crop", methods=["GET"])
+
+@shadowtext_bp.route('/shadowtext/crop')
 def crop():
+    """Crop the generated image to a square"""
     path = "static/generated.png"
     if not os.path.exists(path):
         return "No image to crop.", 404
@@ -139,6 +149,3 @@ def crop():
 
     return send_file(cropped_path, as_attachment=True)
 
-
-if __name__ == "__main__":
-    app.run(debug=True)
