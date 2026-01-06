@@ -9,50 +9,206 @@ def convert_to_24hour(time_str, period):
     """Convert 12-hour time to 24-hour format"""
     if not period:
         return time_str
-    
+
     hour, minute = time_str.split(':')
     hour = int(hour)
-    
+
     if period.upper() == 'PM' and hour != 12:
         hour += 12
     elif period.upper() == 'AM' and hour == 12:
         hour = 0
-    
+
     return f"{hour:02d}:{minute}"
+
+def is_time_cell(cell_value):
+    """Check if a cell contains a time value (e.g., '8:00-9:20', '10:45 AM - 12:25 PM')"""
+    if not cell_value:
+        return False
+    cell_str = str(cell_value).strip()
+    # Match patterns like "8:00-9:20", "8:00 - 9:20", "10:45 AM - 12:25 PM"
+    time_pattern = r'\d{1,2}:\d{2}\s*[-–]\s*\d{1,2}:\d{2}'
+    return bool(re.search(time_pattern, cell_str))
+
+def is_day_name(cell_value):
+    """Check if a cell contains a day name"""
+    if not cell_value:
+        return False
+    cell_str = str(cell_value).strip().lower()
+    days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']
+    return cell_str in days or isinstance(cell_value, datetime)
+
+def detect_day_blocks(ws):
+    """
+    Automatically detect day blocks in a worksheet.
+    Returns a list of dictionaries with day_cell, time_row, room_rows, and time_cols.
+    """
+    blocks = []
+    merged_cells = ws.merged_cells.ranges
+    processed_rows = set()  # Track which rows we've already processed as day blocks
+
+    def get_cell_value(row, col):
+        """Get cell value, handling merged cells"""
+        cell = ws.cell(row=row, column=col)
+        coord = f"{get_column_letter(col)}{row}"
+        for merged in merged_cells:
+            if coord in merged:
+                return ws.cell(merged.min_row, merged.min_col).value
+        return cell.value
+
+    # Search for day cells in column B (column 2)
+    max_row = ws.max_row
+    for row in range(1, max_row + 1):
+        if row in processed_rows:
+            continue
+
+        cell_value = get_cell_value(row, 2)  # Column B
+
+        if is_day_name(cell_value):
+            # Found a potential day cell
+            day_row = row
+
+            # Check if there's a time cell in the same row (to the right)
+            # If yes, we need to use the cell below as the actual day cell
+            has_time_in_same_row = False
+            for col in range(3, 15):  # Check columns C to N
+                if is_time_cell(get_cell_value(row, col)):
+                    has_time_in_same_row = True
+                    break
+
+            if has_time_in_same_row:
+                # Check if the cell below also has the same day name
+                # This handles the Monday case where B5 and B6 both have "Monday"
+                cell_below = get_cell_value(row + 1, 2)
+                if is_day_name(cell_below) and str(cell_below).strip().lower() == str(cell_value).strip().lower():
+                    # Use the cell below as the day cell
+                    day_row = row + 1
+                    time_row = row
+                    room_search_start = row + 2  # Rooms start after the duplicate day cell
+                    processed_rows.add(row)
+                    processed_rows.add(row + 1)
+                else:
+                    # Just use current row as day, time is in the same row
+                    day_row = row
+                    time_row = row
+                    room_search_start = row + 1
+                    processed_rows.add(row)
+            else:
+                # Look for "Rooms" cell below the day cell
+                rooms_row = None
+                for r in range(row + 1, min(row + 5, max_row + 1)):
+                    rooms_value = get_cell_value(r, 2)
+                    if rooms_value and str(rooms_value).strip().lower() == 'rooms':
+                        rooms_row = r
+                        break
+
+                if rooms_row:
+                    # Time row is the one with "Rooms"
+                    time_row = rooms_row
+                    room_search_start = rooms_row + 1
+                else:
+                    # Default: time row is one above the day cell
+                    time_row = row - 1
+                    room_search_start = row + 1
+
+                processed_rows.add(row)
+
+            # Detect time columns (columns that have time values in the time_row)
+            time_cols = []
+            for col in range(3, 20):  # Check columns C onwards
+                cell_val = get_cell_value(time_row, col)
+                if is_time_cell(cell_val):
+                    time_cols.append(col)
+
+            if not time_cols:
+                continue  # Skip if no time columns found
+
+            # Detect room rows (rows below the time_row that have room names in column B)
+            room_rows = []
+            # Use room_search_start if defined, otherwise default to time_row + 1
+            for r in range(room_search_start, min(room_search_start + 20, max_row + 1)):
+                room_value = get_cell_value(r, 2)
+
+                # Stop if we hit another day name or empty rows
+                if is_day_name(room_value):
+                    break
+
+                # Check if this row has room data (non-empty cell in column B)
+                if room_value and str(room_value).strip():
+                    # Skip if it's "Rooms" label
+                    if str(room_value).strip().lower() != 'rooms':
+                        room_rows.append(r)
+                elif len(room_rows) > 0:
+                    # Stop if we've found rooms and now hit an empty cell
+                    # But allow a few empty cells in between
+                    empty_count = 0
+                    for check_r in range(r, min(r + 3, max_row + 1)):
+                        if not get_cell_value(check_r, 2):
+                            empty_count += 1
+                    if empty_count >= 2:
+                        break
+
+            if room_rows:
+                day_name = get_cell_value(day_row, 2)
+                if isinstance(day_name, datetime):
+                    day_name = day_name.strftime("%A")
+                else:
+                    day_name = str(day_name).strip()
+
+                blocks.append({
+                    "day_cell": f"B{day_row}",
+                    "day_row": day_row,
+                    "time_row": time_row,
+                    "room_rows": room_rows,
+                    "time_cols": time_cols,
+                    "day_name": day_name  # For debugging
+                })
+                print(f"    - {day_name}: day_row={day_row}, time_row={time_row}, rooms={len(room_rows)}, time_cols={len(time_cols)}")
+
+    return blocks
 
 def convert_xlsx_to_csv(input_filename, output_filename=None):
     """
-    Convert Excel timetable to CSV format
-    
+    Convert Excel timetable to CSV format with automatic detection of day blocks.
+
     Parameters:
     input_filename (str): Path to the input XLSX file
-    output_filename (str, optional): Path to the output CSV file. If None, 
+    output_filename (str, optional): Path to the output CSV file. If None,
                                     will use input filename with .csv extension
-    
+
     Returns:
     str: Path to the created CSV file
     """
     # If output_filename not provided, derive from input_filename
     if output_filename is None:
         output_filename = os.path.splitext(input_filename)[0] + '.csv'
-    
+
     # Ensure output directory exists
-    os.makedirs(os.path.dirname(output_filename), exist_ok=True)
-    
+    output_dir = os.path.dirname(output_filename)
+    if output_dir:
+        os.makedirs(output_dir, exist_ok=True)
+
     # Load workbook and get all worksheets
     wb = load_workbook(filename=input_filename)
     worksheets = wb.worksheets
 
-    # Define layout structure with worksheet information
-    day_blocks = [
-        {"day_cell": "B6", "room_rows": range(7, 20), "time_row": 5, "sheet_index": 0, "time_cols": range(4, 12)},  # D to K
-        {"day_cell": "B20", "room_rows": range(22, 35), "time_row": 21, "sheet_index": 0, "time_cols": range(4, 12)},
-        {"day_cell": "B35", "room_rows": range(37, 51), "time_row": 36, "sheet_index": 0, "time_cols": range(4, 12)},
-        {"day_cell": "B51", "room_rows": range(53, 66), "time_row": 52, "sheet_index": 0, "time_cols": range(4, 12)},
-        {"day_cell": "B66", "room_rows": range(68, 83), "time_row": 67, "sheet_index": 0, "time_cols": range(4, 12)},
-        {"day_cell": "B1", "room_rows": range(3, 14), "time_row": 2, "sheet_index": 1, "time_cols": range(4, 8)},  # D to G
-        {"day_cell": "B14", "room_rows": range(16, 26), "time_row": 15, "sheet_index": 1, "time_cols": range(4, 8)},  # D to G
-    ]
+    # Automatically detect day blocks from all worksheets
+    all_day_blocks = []
+    for sheet_index, ws in enumerate(worksheets):
+        print(f"Detecting blocks in sheet {sheet_index + 1}: {ws.title}")
+        blocks = detect_day_blocks(ws)
+        for block in blocks:
+            block["sheet_index"] = sheet_index
+            all_day_blocks.append(block)
+        print(f"  Found {len(blocks)} day block(s)")
+
+    print(f"\nTotal blocks detected across all sheets: {len(all_day_blocks)}")
+
+    if not all_day_blocks:
+        print("Warning: No day blocks detected in the workbook!")
+        # Create empty CSV
+        df = pd.DataFrame(columns=["Day", "Time", "Room", "Subject", "Class/Group", "Teacher(s) Name"])
+        df.to_csv(output_filename, index=False)
+        return output_filename
 
     def fix_class_group_format(class_group_str):
         if not class_group_str:
@@ -93,13 +249,13 @@ def convert_xlsx_to_csv(input_filename, output_filename=None):
     # Extract structured timetable
     rows = []
 
-    for block in day_blocks:
+    for block in all_day_blocks:
         # Get the appropriate worksheet
         ws = worksheets[block["sheet_index"]]
-        
+
         # Get merged cells for this worksheet
         merged_cells = ws.merged_cells.ranges
-        
+
         # Update get_cell_value to use current worksheet
         def get_cell_value(row, col):
             cell = ws.cell(row=row, column=col)
@@ -108,7 +264,7 @@ def convert_xlsx_to_csv(input_filename, output_filename=None):
                 if coord in merged:
                     return ws.cell(merged.min_row, merged.min_col).value
             return cell.value
-        
+
         raw_day = ws[block["day_cell"]].value
         if isinstance(raw_day, datetime):
             day = raw_day.strftime("%A")
