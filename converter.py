@@ -265,11 +265,11 @@ def convert_xlsx_to_csv(input_filename, output_filename=None):
                     return ws.cell(merged.min_row, merged.min_col).value
             return cell.value
 
-        raw_day = ws[block["day_cell"]].value
+        raw_day = get_cell_value(block["day_row"], 2)  # Column B = 2
         if isinstance(raw_day, datetime):
             day = raw_day.strftime("%A")
         else:
-            day = str(raw_day).strip()
+            day = str(raw_day).strip() if raw_day else "Unknown"
 
         time_row = block["time_row"]
         room_rows = block["room_rows"]
