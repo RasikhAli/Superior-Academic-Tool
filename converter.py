@@ -276,15 +276,87 @@ def convert_xlsx_to_csv(input_filename, output_filename=None):
         time_cols = block["time_cols"]
 
         # Get all time slots for this block
-        time_slots = {col: str(get_cell_value(time_row, col)).strip() for col in time_cols}
+        def clean_time_value(val):
+            """Clean time value by removing tabs and normalizing dashes"""
+            if not val:
+                return ""
+            time_str = str(val).strip()
+            # Replace tabs with spaces
+            time_str = time_str.replace('\t', ' ')
+            # Replace various dash types with standard hyphen
+            time_str = time_str.replace('–', '-').replace('—', '-')
+            # Normalize spaces around dash
+            time_str = re.sub(r'\s*-\s*', ' - ', time_str)
+            return time_str
+
+        time_slots = {col: clean_time_value(get_cell_value(time_row, col)) for col in time_cols}
+
+        def get_merged_time_range(row, col):
+            """Get the time range for a cell, considering if it's merged across multiple time columns"""
+            coord = f"{get_column_letter(col)}{row}"
+
+            # Check if this cell is part of a merged range
+            for merged in merged_cells:
+                if coord in merged:
+                    # Get the start and end columns of the merged range
+                    start_col = merged.min_col
+                    end_col = merged.max_col
+
+                    # Find the time columns that overlap with this merged range
+                    overlapping_time_cols = [tc for tc in time_cols if start_col <= tc <= end_col]
+
+                    if len(overlapping_time_cols) >= 2:
+                        # Get start time from first column and end time from last column
+                        first_time_col = overlapping_time_cols[0]
+                        last_time_col = overlapping_time_cols[-1]
+
+                        first_time_str = time_slots.get(first_time_col, "")
+                        last_time_str = time_slots.get(last_time_col, "")
+
+                        # Extract start time from first slot and end time from last slot
+                        first_match = re.search(r'(\d{1,2}:\d{2})', first_time_str)
+                        last_match = re.search(r'(\d{1,2}:\d{2})\s*$', last_time_str)
+
+                        if first_match and last_match:
+                            start_time = first_match.group(1)
+                            end_time = last_match.group(1)
+                            return f"{start_time} - {end_time}"
+                    elif len(overlapping_time_cols) == 1:
+                        # Only one time column, use its time
+                        return time_slots.get(overlapping_time_cols[0], "")
+
+            # Not merged, return the time for this column
+            return time_slots.get(col, "")
+
+        # Track which cells we've already processed (to avoid duplicates from merged cells)
+        processed_cells = set()
 
         # Loop through each row (i.e., room) and each time slot
         for r in room_rows:
             room = get_cell_value(r, 2)  # Column B = 2 (Rooms)
             for c in time_cols:
+                coord = f"{get_column_letter(c)}{r}"
+
+                # Skip if we've already processed this cell (part of a merged range)
+                if coord in processed_cells:
+                    continue
+
                 val = get_cell_value(r, c)
                 if not val:
                     continue
+
+                # Mark this cell and any merged cells as processed
+                for merged in merged_cells:
+                    if coord in merged:
+                        # Mark all cells in this merged range as processed
+                        for mr in range(merged.min_row, merged.max_row + 1):
+                            for mc in range(merged.min_col, merged.max_col + 1):
+                                if mc in time_cols:  # Only mark time columns
+                                    processed_cells.add(f"{get_column_letter(mc)}{mr}")
+                        break
+                else:
+                    # Not merged, just mark this cell
+                    processed_cells.add(coord)
 
                 # Handle multi-line and complex cell content
                 lines = [line.strip() for line in str(val).strip().split("\n") if line.strip()]
@@ -352,9 +424,11 @@ def convert_xlsx_to_csv(input_filename, output_filename=None):
                             teachers.append(line)
 
                 # If a timeslot was detected in the teacher's name, use it
-                time_for_this_class = time_slots.get(c)  # Default time slot
+                # Otherwise, get the time range considering merged cells
                 if teacher_timeslot:
                     time_for_this_class = teacher_timeslot
+                else:
+                    time_for_this_class = get_merged_time_range(r, c)
 
                 # Apply fix_class_group_format to the entire group string
                 full_groups = " & ".join(groups)  # Now this will have the proper format
@@ -374,6 +448,15 @@ def convert_xlsx_to_csv(input_filename, output_filename=None):
     df = pd.DataFrame(rows)
 
     def fix_time_format(time_str):
+        if not time_str:
+            return time_str
+        # Replace tabs with a dash if they appear between times
+        # Pattern: "HH:MM<tab>HH:MM" -> "HH:MM - HH:MM"
+        time_str = re.sub(r'(\d{1,2}:\d{2})\s*\t\s*(\d{1,2}:\d{2})', r'\1 - \2', time_str)
+        # Replace remaining tabs with spaces
+        time_str = time_str.replace('\t', ' ')
+        # Replace various dash types (en-dash, em-dash, hyphen) with standard hyphen
+        time_str = time_str.replace('–', '-').replace('—', '-')
         # Normalize all time ranges to have exactly one space before and after the dash
         return re.sub(r'\s*-\s*', ' - ', time_str.strip())
 
