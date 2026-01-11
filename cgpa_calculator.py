@@ -21,29 +21,30 @@ def calculate_gpa(subjects, marks, credit_hours, is_first_semester, previous_cgp
             mark = float(marks[marks_key])
             credit = int(credit_hours[credits_key])
             
-            # Convert marks to grade points
+            # Convert marks to grade points based on the grading scheme:
+            # 85-100: A (4.0), 80-84: A- (3.66), 75-79: B+ (3.33), 71-74: B (3.0)
+            # 68-70: B- (2.66), 64-67: C+ (2.33), 61-63: C (2.0), 58-60: C- (1.66)
+            # 50-57: D (1.0), 0-49: F (0.0)
             if mark >= 85:
-                grade_point = 4.0
+                grade_point = 4.0  # A
             elif mark >= 80:
-                grade_point = 3.66
+                grade_point = 3.66  # A-
             elif mark >= 75:
-                grade_point = 3.33
-            elif mark >= 70:
-                grade_point = 3.0
-            elif mark >= 65:
-                grade_point = 2.66
-            elif mark >= 60:
-                grade_point = 2.33
-            elif mark >= 55:
-                grade_point = 2.0
+                grade_point = 3.33  # B+
+            elif mark >= 71:
+                grade_point = 3.0  # B
+            elif mark >= 68:
+                grade_point = 2.66  # B-
+            elif mark >= 64:
+                grade_point = 2.33  # C+
+            elif mark >= 61:
+                grade_point = 2.0  # C
+            elif mark >= 58:
+                grade_point = 1.66  # C-
             elif mark >= 50:
-                grade_point = 1.66
-            elif mark >= 45:
-                grade_point = 1.33
-            elif mark >= 40:
-                grade_point = 1.0
+                grade_point = 1.0  # D
             else:
-                grade_point = 0.0
+                grade_point = 0.0  # F
             
             total_points += grade_point * credit
             total_credits += credit
@@ -63,25 +64,28 @@ def calculate_gpa(subjects, marks, credit_hours, is_first_semester, previous_cgp
     return round(sgpa, 2), round(cgpa, 2), grades
 
 def grade_point_to_grade(grade_point):
-    if grade_point == 4:
+    """
+    Convert grade point to letter grade based on the grading scheme:
+    A: 4.0, A-: 3.66, B+: 3.33, B: 3.0, B-: 2.66
+    C+: 2.33, C: 2.0, C-: 1.66, D: 1.0, F: 0.0
+    """
+    if grade_point >= 4.0:
         return 'A'
     elif grade_point >= 3.66:
         return 'A-'
     elif grade_point >= 3.33:
         return 'B+'
-    elif grade_point >= 3:
+    elif grade_point >= 3.0:
         return 'B'
     elif grade_point >= 2.66:
         return 'B-'
     elif grade_point >= 2.33:
         return 'C+'
-    elif grade_point >= 2:
+    elif grade_point >= 2.0:
         return 'C'
     elif grade_point >= 1.66:
         return 'C-'
-    elif grade_point >= 1.33:
-        return 'D+'
-    elif grade_point >= 1:
+    elif grade_point >= 1.0:
         return 'D'
     else:
         return 'F'
