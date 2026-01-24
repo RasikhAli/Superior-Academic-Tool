@@ -210,17 +210,45 @@ def convert_xlsx_to_csv(input_filename, output_filename=None):
         df.to_csv(output_filename, index=False)
         return output_filename
 
+    def fix_teacher_name_format(teacher_name):
+        """Fix spacing issues in teacher names, especially with titles"""
+        if not teacher_name:
+            return teacher_name
+
+        # Fix titles that are missing space after the period
+        # Handles: Mr., Ms., Mrs., Dr., Prof., Sir, Madam, etc.
+        # Pattern: Title followed by period with no space or directly followed by a capital letter
+        teacher_name = re.sub(
+            r'\b(Mr|Ms|Mrs|Dr|Prof|Sir|Madam)\.([A-Z])',
+            r'\1. \2',
+            teacher_name,
+            flags=re.IGNORECASE
+        )
+
+        # Also handle cases where there's no period but title is directly attached
+        # e.g., "MrNajaf" -> "Mr. Najaf"
+        teacher_name = re.sub(
+            r'\b(Mr|Ms|Mrs|Dr|Prof)([A-Z][a-z])',
+            r'\1. \2',
+            teacher_name
+        )
+
+        # Normalize multiple spaces to single space
+        teacher_name = re.sub(r'\s+', ' ', teacher_name)
+
+        return teacher_name.strip()
+
     def fix_class_group_format(class_group_str):
         if not class_group_str:
             return class_group_str
-            
+
         # Format 1: BSDS/BSAI-6A → BSDS-6A & BSAI-6A
         class_group_str = re.sub(
             r'\b([A-Z]{4})/([A-Z]{4})-(\d+[A-Za-z]*)\b',
             r'\1-\3 & \2-\3',
             class_group_str
         )
-        
+
         # Format 2: BSAI-1A/BSDS-1A → BSAI-1A & BSDS-1A
         class_group_str = re.sub(
             r'\b([A-Z]{4}-\d+[A-Za-z]*)/([A-Z]{4}-\d+[A-Za-z]*)\b',
@@ -250,157 +278,144 @@ def convert_xlsx_to_csv(input_filename, output_filename=None):
     rows = []
 
     for block in all_day_blocks:
-        # Get the appropriate worksheet
-        ws = worksheets[block["sheet_index"]]
+        try:
+            print(f"\nProcessing block: {block['day_name']}")
+            # Get the appropriate worksheet
+            ws = worksheets[block["sheet_index"]]
 
-        # Get merged cells for this worksheet
-        merged_cells = ws.merged_cells.ranges
+            # Get merged cells for this worksheet
+            merged_cells = ws.merged_cells.ranges
 
-        # Update get_cell_value to use current worksheet
-        def get_cell_value(row, col):
-            cell = ws.cell(row=row, column=col)
-            coord = f"{get_column_letter(col)}{row}"
-            for merged in merged_cells:
-                if coord in merged:
-                    return ws.cell(merged.min_row, merged.min_col).value
-            return cell.value
-
-        raw_day = get_cell_value(block["day_row"], 2)  # Column B = 2
-        if isinstance(raw_day, datetime):
-            day = raw_day.strftime("%A")
-        else:
-            day = str(raw_day).strip() if raw_day else "Unknown"
-
-        time_row = block["time_row"]
-        room_rows = block["room_rows"]
-        time_cols = block["time_cols"]
-
-        # Get all time slots for this block
-        def clean_time_value(val):
-            """Clean time value by removing tabs and normalizing dashes"""
-            if not val:
-                return ""
-            time_str = str(val).strip()
-            # Replace tabs with spaces
-            time_str = time_str.replace('\t', ' ')
-            # Replace various dash types with standard hyphen
-            time_str = time_str.replace('–', '-').replace('—', '-')
-            # Normalize spaces around dash
-            time_str = re.sub(r'\s*-\s*', ' - ', time_str)
-            return time_str
-
-        time_slots = {col: clean_time_value(get_cell_value(time_row, col)) for col in time_cols}
-
-        def get_merged_time_range(row, col):
-            """Get the time range for a cell, considering if it's merged across multiple time columns"""
-            coord = f"{get_column_letter(col)}{row}"
-
-            # Check if this cell is part of a merged range
-            for merged in merged_cells:
-                if coord in merged:
-                    # Get the start and end columns of the merged range
-                    start_col = merged.min_col
-                    end_col = merged.max_col
-
-                    # Find the time columns that overlap with this merged range
-                    overlapping_time_cols = [tc for tc in time_cols if start_col <= tc <= end_col]
-
-                    if len(overlapping_time_cols) >= 2:
-                        # Get start time from first column and end time from last column
-                        first_time_col = overlapping_time_cols[0]
-                        last_time_col = overlapping_time_cols[-1]
-
-                        first_time_str = time_slots.get(first_time_col, "")
-                        last_time_str = time_slots.get(last_time_col, "")
-
-                        # Extract start time from first slot and end time from last slot
-                        first_match = re.search(r'(\d{1,2}:\d{2})', first_time_str)
-                        last_match = re.search(r'(\d{1,2}:\d{2})\s*$', last_time_str)
-
-                        if first_match and last_match:
-                            start_time = first_match.group(1)
-                            end_time = last_match.group(1)
-                            return f"{start_time} - {end_time}"
-                    elif len(overlapping_time_cols) == 1:
-                        # Only one time column, use its time
-                        return time_slots.get(overlapping_time_cols[0], "")
-
-            # Not merged, return the time for this column
-            return time_slots.get(col, "")
-
-        # Track which cells we've already processed (to avoid duplicates from merged cells)
-        processed_cells = set()
-
-        # Loop through each row (i.e., room) and each time slot
-        for r in room_rows:
-            room = get_cell_value(r, 2)  # Column B = 2 (Rooms)
-            for c in time_cols:
-                coord = f"{get_column_letter(c)}{r}"
-
-                # Skip if we've already processed this cell (part of a merged range)
-                if coord in processed_cells:
-                    continue
-
-                val = get_cell_value(r, c)
-                if not val:
-                    continue
-
-                # Mark this cell and any merged cells as processed
+            # Update get_cell_value to use current worksheet
+            def get_cell_value(row, col):
+                cell = ws.cell(row=row, column=col)
+                coord = f"{get_column_letter(col)}{row}"
                 for merged in merged_cells:
                     if coord in merged:
-                        # Mark all cells in this merged range as processed
-                        for mr in range(merged.min_row, merged.max_row + 1):
-                            for mc in range(merged.min_col, merged.max_col + 1):
-                                if mc in time_cols:  # Only mark time columns
-                                    processed_cells.add(f"{get_column_letter(mc)}{mr}")
-                        break
-                else:
-                    # Not merged, just mark this cell
-                    processed_cells.add(coord)
+                        return ws.cell(merged.min_row, merged.min_col).value
+                return cell.value
 
-                # Handle multi-line and complex cell content
-                lines = [line.strip() for line in str(val).strip().split("\n") if line.strip()]
+            raw_day = get_cell_value(block["day_row"], 2)  # Column B = 2
+            if isinstance(raw_day, datetime):
+                day = raw_day.strftime("%A")
+            else:
+                day = str(raw_day).strip() if raw_day else "Unknown"
 
-                # Skip unwanted entries
-                if lines and lines[0].lower() in ["used in cs department", "namaz break"]:
-                    continue
+            time_row = block["time_row"]
+            room_rows = block["room_rows"]
+            time_cols = block["time_cols"]
 
-                subject = lines[0]
-                groups = []
-                teachers = []
-                teacher_timeslot = None
+            # Get all time slots for this block
+            def clean_time_value(val):
+                """Clean time value by removing tabs and normalizing dashes"""
+                if not val:
+                    return ""
+                time_str = str(val).strip()
+                # Replace tabs with spaces
+                time_str = time_str.replace('\t', ' ')
+                # Replace various dash types with standard hyphen
+                time_str = time_str.replace('–', '-').replace('—', '-')
+                # Normalize spaces around dash
+                time_str = re.sub(r'\s*-\s*', ' - ', time_str)
+                return time_str
 
-                for line in lines[1:]:
-                    # Detect group identifiers
-                    if re.search(r'\b(BS\w{2,4})[-/]\d+[A-Za-z]*', line):
-                        # Convert "BSDS/BSAI-6A" to "BSDS-6A & BSAI-6A"
-                        line = fix_class_group_format(line)
-                        groups.append(line)
-                    # Check if this line is just a time slot in parentheses (e.g., "(10:45 am to 12:25 pm)")
-                    elif re.match(r'^\s*\(([^)]+)\)\s*$', line):
-                        timeslot_text = re.match(r'^\s*\(([^)]+)\)\s*$', line).group(1).strip()
+            time_slots = {col: clean_time_value(get_cell_value(time_row, col)) for col in time_cols}
 
-                        # Extract time from various formats and convert to 24-hour
-                        time_match = re.search(r'(\d{1,2}:\d{2})\s*(AM|PM)?\s*(?:-|TO|to)\s*(\d{1,2}:\d{2})\s*(AM|PM)?', timeslot_text, re.IGNORECASE)
-                        if time_match:
-                            start_time = time_match.group(1)
-                            start_period = time_match.group(2)
-                            end_time = time_match.group(3)
-                            end_period = time_match.group(4)
+            def get_merged_time_range(row, col):
+                """Get the time range for a cell, considering if it's merged across multiple time columns"""
+                coord = f"{get_column_letter(col)}{row}"
 
-                            # Convert to 24-hour format if AM/PM is present
-                            if start_period:
-                                start_time = convert_to_24hour(start_time, start_period)
-                            if end_period:
-                                end_time = convert_to_24hour(end_time, end_period)
+                # Check if this cell is part of a merged range
+                for merged in merged_cells:
+                    if coord in merged:
+                        # Get the start and end columns of the merged range
+                        start_col = merged.min_col
+                        end_col = merged.max_col
 
-                            teacher_timeslot = f"{start_time} - {end_time}"
+                        # Find the time columns that overlap with this merged range
+                        overlapping_time_cols = [tc for tc in time_cols if start_col <= tc <= end_col]
+
+                        if len(overlapping_time_cols) >= 2:
+                            # Get start time from first column and end time from last column
+                            first_time_col = overlapping_time_cols[0]
+                            last_time_col = overlapping_time_cols[-1]
+
+                            first_time_str = time_slots.get(first_time_col, "")
+                            last_time_str = time_slots.get(last_time_col, "")
+
+                            # Extract start time from first slot and end time from last slot
+                            first_match = re.search(r'(\d{1,2}:\d{2})', first_time_str)
+                            last_match = re.search(r'(\d{1,2}:\d{2})\s*$', last_time_str)
+
+                            if first_match and last_match:
+                                start_time = first_match.group(1)
+                                end_time = last_match.group(1)
+                                return f"{start_time} - {end_time}"
+                        elif len(overlapping_time_cols) == 1:
+                            # Only one time column, use its time
+                            return time_slots.get(overlapping_time_cols[0], "")
+                        else:
+                            # No overlapping time columns found, return empty string
+                            return ""
+
+                # Not merged, return the time for this column
+                return time_slots.get(col, "")
+
+            # Track which cells we've already processed (to avoid duplicates from merged cells)
+            processed_cells = set()
+
+            # Loop through each row (i.e., room) and each time slot
+            for r in room_rows:
+                room = get_cell_value(r, 2)  # Column B = 2 (Rooms)
+                for c in time_cols:
+                    coord = f"{get_column_letter(c)}{r}"
+
+                    # Skip if we've already processed this cell (part of a merged range)
+                    if coord in processed_cells:
+                        continue
+
+                    val = get_cell_value(r, c)
+                    if not val:
+                        continue
+
+                    # Mark this cell and any merged cells as processed
+                    for merged in merged_cells:
+                        if coord in merged:
+                            # Mark all cells in this merged range as processed
+                            for mr in range(merged.min_row, merged.max_row + 1):
+                                for mc in range(merged.min_col, merged.max_col + 1):
+                                    if mc in time_cols:  # Only mark time columns
+                                        processed_cells.add(f"{get_column_letter(mc)}{mr}")
+                            break
                     else:
-                        # Detect teacher and timeslot on same line (e.g., "Ms. Namra Amjad (10:45 AM TO 12:25 PM)")
-                        match = re.match(r"(.*?)\s*\(([^)]+)\)\s*$", line)
-                        if match:
-                            teacher_name = match.group(1).strip()
-                            timeslot_text = match.group(2).strip()
+                        # Not merged, just mark this cell
+                        processed_cells.add(coord)
+
+                    # Handle multi-line and complex cell content
+                    lines = [line.strip() for line in str(val).strip().split("\n") if line.strip()]
+
+                    # Skip if no valid lines
+                    if not lines:
+                        continue
+
+                    # Skip unwanted entries
+                    if lines[0].lower() in ["used in cs department", "namaz break"]:
+                        continue
+
+                    subject = lines[0]
+                    groups = []
+                    teachers = []
+                    teacher_timeslot = None
+
+                    for line in lines[1:]:
+                        # Detect group identifiers
+                        if re.search(r'\b(BS\w{2,4})[-/]\d+[A-Za-z]*', line):
+                            # Convert "BSDS/BSAI-6A" to "BSDS-6A & BSAI-6A"
+                            line = fix_class_group_format(line)
+                            groups.append(line)
+                        # Check if this line is just a time slot in parentheses (e.g., "(10:45 am to 12:25 pm)")
+                        elif re.match(r'^\s*\(([^)]+)\)\s*$', line):
+                            timeslot_text = re.match(r'^\s*\(([^)]+)\)\s*$', line).group(1).strip()
 
                             # Extract time from various formats and convert to 24-hour
                             time_match = re.search(r'(\d{1,2}:\d{2})\s*(AM|PM)?\s*(?:-|TO|to)\s*(\d{1,2}:\d{2})\s*(AM|PM)?', timeslot_text, re.IGNORECASE)
@@ -416,33 +431,64 @@ def convert_xlsx_to_csv(input_filename, output_filename=None):
                                 if end_period:
                                     end_time = convert_to_24hour(end_time, end_period)
 
-                                teacher_timeslot = f"{start_time} - {end_time}"
-
-                            teachers.append(teacher_name)
+                            teacher_timeslot = f"{start_time} - {end_time}"
                         else:
-                            # Consider it part of teacher names if not matched with timeslot
-                            teachers.append(line)
+                            # Detect teacher and timeslot on same line (e.g., "Ms. Namra Amjad (10:45 AM TO 12:25 PM)")
+                            match = re.match(r"(.*?)\s*\(([^)]+)\)\s*$", line)
+                            if match:
+                                teacher_name = match.group(1).strip()
+                                timeslot_text = match.group(2).strip()
 
-                # If a timeslot was detected in the teacher's name, use it
-                # Otherwise, get the time range considering merged cells
-                if teacher_timeslot:
-                    time_for_this_class = teacher_timeslot
-                else:
-                    time_for_this_class = get_merged_time_range(r, c)
+                                # Extract time from various formats and convert to 24-hour
+                                time_match = re.search(r'(\d{1,2}:\d{2})\s*(AM|PM)?\s*(?:-|TO|to)\s*(\d{1,2}:\d{2})\s*(AM|PM)?', timeslot_text, re.IGNORECASE)
+                                if time_match:
+                                    start_time = time_match.group(1)
+                                    start_period = time_match.group(2)
+                                    end_time = time_match.group(3)
+                                    end_period = time_match.group(4)
 
-                # Apply fix_class_group_format to the entire group string
-                full_groups = " & ".join(groups)  # Now this will have the proper format
-                full_teachers = " ".join([t.strip().strip(",") for t in ", ".join(teachers).split(",") if t.strip()])
+                                    # Convert to 24-hour format if AM/PM is present
+                                    if start_period:
+                                        start_time = convert_to_24hour(start_time, start_period)
+                                    if end_period:
+                                        end_time = convert_to_24hour(end_time, end_period)
 
-                # Append row with formatted data
-                rows.append({
-                    "Day": day,
-                    "Time": time_for_this_class,
-                    "Room": str(room).strip(),
-                    "Subject": subject,
-                    "Class/Group": fix_class_group_format(full_groups),  # Apply here
-                    "Teacher(s) Name": full_teachers
-                })
+                                    teacher_timeslot = f"{start_time} - {end_time}"
+
+                                teachers.append(teacher_name)
+                            else:
+                                # Consider it part of teacher names if not matched with timeslot
+                                teachers.append(line)
+
+                    # If a timeslot was detected in the teacher's name, use it
+                    # Otherwise, get the time range considering merged cells
+                    if teacher_timeslot:
+                        time_for_this_class = teacher_timeslot
+                    else:
+                        time_for_this_class = get_merged_time_range(r, c)
+
+                    # Apply fix_class_group_format to the entire group string
+                    full_groups = " & ".join(groups)  # Now this will have the proper format
+                    full_teachers = " ".join([t.strip().strip(",") for t in ", ".join(teachers).split(",") if t.strip()])
+
+                    # Fix teacher name formatting (add space after titles like Mr., Ms., etc.)
+                    full_teachers = fix_teacher_name_format(full_teachers)
+
+                    # Append row with formatted data
+                    rows.append({
+                        "Day": day,
+                        "Time": time_for_this_class,
+                        "Room": str(room).strip(),
+                        "Subject": subject,
+                        "Class/Group": fix_class_group_format(full_groups),  # Apply here
+                        "Teacher(s) Name": full_teachers
+                    })
+
+        except Exception as e:
+            print(f"Error processing block {block['day_name']}: {str(e)}")
+            import traceback
+            traceback.print_exc()
+            continue
 
     # Convert to DataFrame
     df = pd.DataFrame(rows)
@@ -484,6 +530,38 @@ def convert_to_24hour(time_str, period):
         hour = 0
     
     return f"{hour:02d}:{minute}"
+
+def merge_consecutive_slots(entries):
+    """Merge consecutive time slots for the same teacher, subject, location, and day"""
+    if not entries:
+        return []
+    
+    # Sort entries by day, start_time, subject, location, teachers
+    entries.sort(key=lambda x: (x["day"], time_to_minutes(x["start_time"]), x["subject"], x["location"], str(x["teachers"])))
+    
+    merged = []
+    current = entries[0].copy()
+    
+    for entry in entries[1:]:
+        if (entry["day"] == current["day"] and
+            entry["location"] == current["location"] and
+            entry["subject"] == current["subject"] and
+            entry["teachers"] == current["teachers"] and
+            time_to_minutes(entry["start_time"]) == time_to_minutes(current["end_time"])):
+            # Merge consecutive slots
+            current["end_time"] = entry["end_time"]
+        else:
+            merged.append(current)
+            current = entry.copy()
+    
+    merged.append(current)
+    
+    return merged
+
+def time_to_minutes(time_str):
+    """Convert time string in 'HH:MM' format to minutes since midnight"""
+    hours, minutes = map(int, time_str.split(':'))
+    return hours * 60 + minutes
 
 # If run directly, use the hardcoded filename
 if __name__ == "__main__":
