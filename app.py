@@ -166,11 +166,18 @@ def extract_timetable_info(filename):
 @app.route('/timetable')
 def get_timetable():
     name = request.args.get('name', '').upper()
-    timetable_type = request.args.get('type', 'teacher')  # 'teacher' or 'section'
+    timetable_type = request.args.get('type', 'teacher')  # 'teacher', 'section', or 'room'
     
     if name:
         if timetable_type == 'teacher':
             data = timetable_data.get(name, [])
+        elif timetable_type == 'room':  # room timetable
+            data = []
+            for entries in timetable_data.values():
+                for entry in entries:
+                    location = entry.get('location', '').strip()
+                    if location and name.lower() in location.lower():
+                        data.append(entry)
         else:  # section timetable
             data = []
             for entries in timetable_data.values():
@@ -213,6 +220,18 @@ def get_sections():
     
     return jsonify(sorted(list(sections)))
 
+@app.route('/get_rooms')
+def get_rooms():
+    """Get all unique rooms/labs from the timetable data"""
+    rooms = set()
+    for entries in timetable_data.values():
+        for entry in entries:
+            location = entry.get('location', '').strip()
+            if location:
+                rooms.add(location)
+    
+    return jsonify(sorted(list(rooms)))
+
 @app.route('/')
 def index():
     global last_modified, timetable_info
@@ -243,12 +262,16 @@ def index():
 
     table_html = generate_cards_html()
     sorted_teachers = sort_teachers_by_prefix_and_name(teacher_names)
+    
+    # Format last modified date
+    last_updated = datetime.fromtimestamp(last_modified).strftime('%b %d, %Y') if last_modified else "N/A"
 
     return render_template('index.html',
                          table_html=table_html,
                          teacher_names=sorted_teachers,
                          semester_info=semester_info,
-                         timetable_info=timetable_info)
+                         timetable_info=timetable_info,
+                         last_updated=last_updated)
 
 def parse_multiple_teachers(teachers_str):
     """Parse multiple teachers from a string like 'Mr. John Mr. Jane Dr. Smith'"""
