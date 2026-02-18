@@ -1,0 +1,173 @@
+Day,Time,Room,Subject,Class/Group,Teacher(s) Name
+Monday,12:00 - 02:00,Lecture Room # 22,Advance Computer Programming,BSDS-4A,Dr. Hafiz Muhammad Tayyab Khushi
+Monday,8:00 - 10:00,Lecture Room # 23,Multivariable Calculus,BSSE-3A,Mr. Hafiz Inam
+Monday,10:00 - 12:00,Lecture Room # 23,Linear Algebra,BSSE-4A,Mr. Usama
+Monday,12:00 - 02:00,Lecture Room # 23,Linear Algebra,BSSE-4D,Mr. Usama
+Monday,10:45 - 12:45,Lecture Room # 24,Computer Networks (Thoery),BSAI-4B,Mr. Rafaqat Ali
+Monday,12:00 - 01:00,Lecture Room # 25,Software Engineering,BSDS-3A & BSAI-3A,Mr. Syed Zeeshan Hussain
+Monday,8:00 - 10:00,Lecture Room # 26,Software Construction & Development,BSAI-6B,Mr. Hafiz Ali Ahmed
+Monday,10:00 - 12:00,Lecture Room # 26,Programming for AI,BSDS-4A,Mr. Philemon Philip
+Monday,10:00 - 12:00,Lecture Room # 27,Object Oriented Programming (Theory),BSAI-3A & BSDS-3A,Mr. Nagesh Kumar
+Monday,12:00 - 02:00,Lecture Room # 27,Technoprenuership,BSAI-6B & BSAI-6C & BSDS-6A,Ms. Aimen Fatima Ms. Asma Abubakar Mr. Hammad Ghulam Mustafa
+Monday,8:00 - 10:00,Lecture Room # 28,Database Systems,BSAI-4A,Ms. Asma Abubakar
+Monday,12:00 - 02:00,Lecture Room # 28,Software Requirement Engineering (Theory + Lab),BSSE-4A,Mr. Abdullah Tanweer
+Monday,8:00 - 10:00,Lecture Room # 29,Computer Networks (Thoery),BSAI-5A & BSDS-5A,Mr. Rafaqat Ali
+Monday,10:00 - 12:00,Lecture Room # 30,Software requirement Engineering,BSSE-4E,Ms. Irum Fatima
+Monday,12:00 - 05:30,Lecture Room # 30,IT Department,,
+Monday,8:00 - 10:00,Computer Lab-7,Computer Networks (Lab),BSSE-4D,Mr. Muhammad Shahzaib
+Monday,10:00 - 12:00,Computer Lab-7,Programming for AI (Lab),BSAI-4A,Mr. Rasikh Ali
+Monday,8:00 - 10:00,Computer Lab-8,Introduction to Data Science,BSAI-4C,Mr. Hammad Ghulam Mustafa
+Monday,8:00 - 10:00,Computer Lab-10,Programming for AI (Lab),BSAI-4B,Mr. Rasikh Ali
+Monday,10:00 - 12:00,Computer Lab-10,Compuetr Networks (Lab),BSSE-4C,Mr. Muhammad Shahzaib
+Monday,12:00 - 02:00,Computer Lab-10,Database Systems (Lab),BSAI-4C,Ms. Iqra Saddique
+Monday,8:00 - 10:00,Auditorium (SE),Advance Computer Programming,BSSE-4E,Mr. Muhammad Aqib
+Monday,10:00 - 12:00,Auditorium (SE),Analysis of Algorithms,BSSE-4B,Mr. Muhammad Sohail Irshad
+Tuesday,12:00 - 02:00,Lecture Room # 22,Linear Algebra,BSSE-4B,Mr. Usama
+Tuesday,12:00 - 02:00,Lecture Room # 23,Compuetr Networks (Lab),BSSE-4A,Mr. Muhammad Shahzaib
+Tuesday,10:00 - 12:00,Lecture Room # 24,Analysis of Algorithms,BSSE-4D,Mr. Muhammad Sohail Irshad
+Tuesday,12:00 - 02:00,Lecture Room # 24,Object Oriented Programming,BSSE-3A,Mr. Nagesh Kumar
+Tuesday,8:00 - 10:00,Lecture Room # 25,Advance Computer Programming,BSAI-4C,Dr. Hafiz Muhammad Tayyab Khushi
+Tuesday,12:00 - 02:00,Lecture Room # 25,Social Entrepreneurship Program,BSSE-4D & BSSE-4E,Ms. Rabia Aziz
+Tuesday,12:00 - 02:00,Lecture Room # 26,Introduction to Data Science,BSAI-4A,Dr. Tehreem Masood
+Tuesday,8:00 - 10:00,Lecture Room # 27,Web Engineering,BSSE-5A,Mr. Najaf Ali
+Tuesday,10:45 - 12:45,Lecture Room # 27,Computer Networks,BSSE-4B,Mr. Syed Zeeshan Hussain
+Tuesday,8:00 - 10:00,Lecture Room # 28,Programming for AI,BSAI-4A,Mr. Philemon Philip
+Tuesday,12:00 - 02:00,Lecture Room # 28,Analysis of Algorithms,BSSE-4C,Mr. Muhammad Sohail Irshad
+Tuesday,8:00 - 10:00,Lecture Room # 29,Advance Computer Programming,BSSE-4A,Ms. Aimen Fatima
+Tuesday,10:00 - 12:00,Lecture Room # 29,Introduction to Data Science (Theory + Lab),BSDS-3A & BSAI-3A,Mr. Hammad Ghulam Mustafa
+Tuesday,12:00 - 02:00,Lecture Room # 29,Introduction to Data Science (Theory + Lab),BSDS-4A,Mr. Hammad Ghulam Mustafa
+Tuesday,10:00 - 12:00,Computer Lab-7,Computer Networks,BSSE-4C,Mr. Najaf Ali
+Tuesday,12:00 - 02:00,Computer Lab-7,Database Systems (Lab),BSAI-4B,Ms. Iqra Saddique
+Tuesday,10:00 - 12:00,Computer Lab-8,Mobile Application Development (Lab),BSSE-5A,Mr. Muhammad Abdullah
+Tuesday,12:00 - 02:00,Computer Lab-8,Computer Networks (Lab),BSAI-4C,Ms. Yusra
+Tuesday,8:00 - 10:00,Computer Lab-10,Computer Networks (Lab),BSAI-5A & BSDS-5A,Ms. Yusra
+Tuesday,10:00 - 12:00,Computer Lab-10,Database Systems,BSDS-4A,Ms. Asma Abubakar
+Tuesday,8:00 - 10:00,Auditorium (SE),Linear Algebra,BSAI-4B,Mr. Muhammad Hamza
+Tuesday,10:00 - 12:00,Auditorium (SE),Analysis of Algorithms,BSAI-5A & BSDS-5A,Mr. Philemon Philip
+Wednesday,12:00 - 02:00,Lecture Room #  12,Mobile Application Development,BSSE-5A,Mr. Muhammad Ahmad
+Wednesday,10:00 - 12:00,Lecture Room # 22,Computer Networks,BSDS-4A,Mr. Rafaqat Ali
+Wednesday,12:00 - 02:00,Lecture Room # 22,Database Systems,BSAI-4B,Ms. Asma Abubakar
+Wednesday,8:00 - 10:00,Lecture Room # 23,Advance Computer Programming,BSAI-4B,Dr. Hafiz Muhammad Tayyab Khushi
+Wednesday,12:00 - 02:00,Lecture Room # 24,Social Entrepreneurship Program,BSSE-4A,Ms. Rabia Aziz
+Wednesday,8:00 - 10:00,Lecture Room # 25,Artificial Intelligence,BSAI-3A & BSDS-3A,Mr. Najaf Ali
+Wednesday,8:00 - 10:00,Lecture Room # 26,Linear Algebra,BSAI-4A,Mr. Muhammad Hamza
+Wednesday,12:00 - 02:00,Lecture Room # 26,Machine Learning,BSSE-6A,Dr. Hafiz Muhammad Shahzad
+Wednesday,12:00 - 02:00,Lecture Room # 27,Technoprenuership,BSSE-5A & BSAI-6A,Mr. Nagesh Kumar Mr. Syed Zeeshan Hussain Mr. Philemon Philip
+Wednesday,10:00 - 11:00,Lecture Room # 28,Software Engineering,BSDS-3A & BSAI-3A,Mr. Syed Zeeshan Hussain
+Wednesday,11:00 - 12:30,Lecture Room # 28,Linear Algebra,BSSE-4C,Mr. Usama
+Wednesday,12:30 - 02:00,Lecture Room # 28,Software Requirement Engineering (Theory + Lab),BSSE-4C,Mr. Abdullah Tanweer
+Wednesday,8:00 - 10:00,Lecture Room # 29,Advance Computer Programming,BSSE-4B,Ms. Aimen Fatima
+Wednesday,10:00 - 12:00,Lecture Room # 29,Software Construction & Development,BSAI-6A,Mr. Hafiz Ali Ahmed
+Wednesday,8:00 - 10:00,Lecture Room # 30,Digital Logic & Design (Theory),BSAI-5A & BSDS-5A,Mr. Zahid Ali
+Wednesday,12:00 - 02:00,Lecture Room # 30,IT Department,,
+Wednesday,12:00 - 02:00,Computer Lab-7,Database Systems (Lab),BSAI-4A,Ms. Iqra Saddique
+Wednesday,8:00 - 10:00,Computer Lab-10,Database Systems (Lab),BSDS-4A,Ms. Iqra Saddique
+Wednesday,10:00 - 12:00,Computer Lab-10,Object Oriented Programming (Lab),BSSE-3A,Mr. Hafiz Asad Ali
+Wednesday,12:00 - 02:00,Computer Lab-10,Computer Networks (Lab),BSSE-4E,Mr. Muhammad Shahzaib
+Wednesday,8:00 - 10:00,Auditorium (SE),Software Engineering,BSSE-3A,Mr. Syed Zeeshan Hussain
+Wednesday,10:00 - 12:00,Auditorium (SE),Software Requirment Engineering,BSSE-4B,Mr. Abdullah Tanweer
+Wednesday,12:00 - 02:00,Auditorium (SE),Computer Networks,BSAI-4C,Mr. Rafaqat Ali
+Thursday,12:00 - 02:00,Lecture Room # 6,Linear Algebra,BSSE-4E,Mr. Muhammad Hamza
+Thursday,12:00 - 02:00,Lecture Room # 7,Analysis of Algorithms,BSSE-4A,Mr. Adeel Amjad
+Thursday,8:00 - 10:00,Lecture Room # 22,Database Systems,BSAI-4C,Ms. Asma Abubakar
+Thursday,10:00 - 12:00,Lecture Room # 22,Software Engineering,BSDS-5A & BSAI-5A,Mr. Syed Zeeshan Hussain
+Thursday,12:00 - 02:00,Lecture Room # 22,Software Construction & Development,BSAI-6C & BSDS-6A,Mr. Hafiz Ali Ahmed
+Thursday,10:00 - 12:00,Lecture Room # 23,Advance Computer Programming,BSSE-4C,Ms. Aimen Fatima
+Thursday,12:00 - 02:00,Lecture Room # 23,Computer Networks (Thoery),BSSE-5A,Mr. Muhammad Sohail Irshad
+Thursday,12:00 - 02:00,Lecture Room # 24,Software Requirement Engineering,BSSE-4D,Mr. Abdullah Tanweer
+Thursday,10:00 - 12:00,Lecture Room # 25,Introduction to Data Science,BSAI-4B,Mr. Hammad Ghulam Mustafa
+Thursday,12:00 - 02:00,Lecture Room # 25,Computer Networks,BSAI-4A,Mr. Rafaqat Ali
+Thursday,10:00 - 12:00,Lecture Room # 26,Multivariable Calculus,BSAI-3A & BSDS-3A,Mr. Hafiz Inam
+Thursday,8:00 - 10:00,Lecture Room # 27,Social Entrepreneurship Program,BSSE-3A & BSSE-4B,Ms. Rabia Aziz
+Thursday,12:00 - 02:00,Lecture Room # 27,Programming for AI,BSAI-4B,Mr. Philemon Philip
+Thursday,12:00 - 02:00,Lecture Room # 28,Calculus & Analytical Geometry,BSSE-7A,Mr. Hafiz Inam
+Thursday,8:00 - 10:00,Lecture Room # 29,Mobile Application Development,BSSE-6A,Mr. Muhammad Ahmad
+Thursday,8:00 - 10:00,Lecture Room # 30,Digital Logic & Design (Lab),BSAI-5A & BSDS-5A,Mr. Zahid Ali
+Thursday,8:00 - 10:00,Computer Lab-7,Advance Computer Programming,BSAI-4A,Dr. Hafiz Muhammad Tayyab Khushi
+Thursday,10:00 - 12:00,Computer Lab-7,Database Systems,BSSE-3A,Ms. Tayyaba Farhat
+Thursday,12:00 - 02:00,Computer Lab-7,Computer Organization & Assembly Language (Lab),BSAI-6B,Mr. Hafiz Asad Ali
+Thursday,8:00 - 10:00,Computer Lab-8,Mobile Application Development (Lab),BSSE-6B,Mr. Muhammad Abdullah
+Thursday,12:00 - 02:00,Computer Lab-8,Machine Learning,BSSE-6D,Dr. Iftikhar Naseer
+Thursday,8:00 - 10:00,Computer Lab-10,Programming for AI (Lab),BSDS-4A,Mr. Rasikh Ali
+Thursday,10:00 - 12:00,Computer Lab-10,Programming for AI (Lab),BSAI-4C,Mr. Rasikh Ali
+Thursday,12:00 - 02:00,Computer Lab-10,Computer Networks (Lab),BSDS-4A,Ms. Yusra
+Thursday,10:00 - 12:00,Auditorium (SE),Computer Networks (Theory),BSSE-4D,Mr. Najaf Ali
+Thursday,12:00 - 02:00,Auditorium (SE),Operations Research,BSSE-6C,Mr. Zahid Ali
+Friday,10:00 - 12:00,Lecture Room # 22,Fundamentals of Business & Finance,BSSE-5A & BSAI-6A & BSAI-7A & BSDS-7A,Ms. Rabia Aziz
+Friday,12:00 - 02:00,Lecture Room # 22,Social Entrepreneurship Program,BSSE-4C/ BSAI-7A & BSDS-7A,Ms. Rabia Aziz
+Friday,8:00 - 10:00,Lecture Room # 23,Programming for AI,BSAI-4C,Mr. Philemon Philip
+Friday,12:00 - 02:00,Lecture Room # 23,Fundamentals of Business & Finance,BSAI-6B & BSAI-6C & BSDS-6A,Mr. Zeeshan Ahmad
+Friday,8:00 - 10:00,Lecture Room # 24,Linear Algebra,BSDS-4A,Mr. Muhammad Hamza
+Friday,12:00 - 02:00,Lecture Room # 24,Artificial Neural Networks,BSAI-8A,Dr. Hafiz Muhammad Shahzad
+Friday,8:00 - 10:00,Lecture Room # 25,Machine Learning,BSAI-7A,Dr. Hafiz Muhammad Shahzad
+Friday,10:00 - 12:00,Lecture Room # 25,Software Construction & Development,BSSE-7A,Mr. Hafiz Ali Ahmed
+Friday,12:00 - 02:00,Lecture Room # 25,Information Security,BSSE-7A,Mr. Muhammad Ahmad
+Friday,8:00 - 10:00,Lecture Room # 26,Computer Networks,BSSE-4A,Mr. Najaf Ali
+Friday,12:00 - 02:00,Lecture Room # 26,Advance Computer Programming,BSSE-4D,Mr. Nagesh Kumar
+Friday,10:00 - 12:00,Lecture Room # 27,Formal Methods in Software Engineering /HCI,BSSE-8A,Mr. Rafaqat Ali
+Friday,12:00 - 02:00,Lecture Room # 27,Machine Learning,BSSE-6C,Dr. Iftikhar Naseer
+Friday,12:00 - 02:00,Lecture Room # 28,Computer Vision (Theory + Lab),BSAI-5A & BSDS-5A,Mr. Ansar Naseem
+Friday,10:00 - 12:00,Lecture Room # 29,Analysis of Algorithms,BSSE-4E,Mr. Muhammad Sohail Irshad
+Friday,12:00 - 02:00,Lecture Room # 29,Computer Networks,BSSE-4E,Mr. Najaf Ali
+Friday,8:00 - 10:00,Lecture Room # 30,Computer Organization & Assembly Language (Lab),BSAI-6C & BSDS-6A,Mr. Hafiz Asad Ali
+Friday,12:00 - 03:00,Lecture Room # 30,Used in IT Department,,
+Friday,8:00 - 10:00,Computer Lab-7,Artificial Intelligence (Lab),BSAI-3A & BSDS-3A,Mr. Rasikh Ali
+Friday,12:00 - 02:00,Computer Lab-7,Computer Networks (Lab),BSAI-4B,Ms. Yusra
+Friday,8:00 - 10:00,Computer Lab-8,Computer Networks (Lab),BSAI-4A,Ms. Yusra
+Friday,10:00 - 12:00,Computer Lab-8,Database Systems (Lab),BSSE-3A,Mr. Hafiz Asad Ali
+Friday,12:00 - 02:00,Computer Lab-8,Mobile Application Development (Lab),BSSE-6D,Mr. Muhammad Abdullah
+Friday,8:00 - 10:00,Computer Lab-10,Computer Networks (Lab),BSSE-5A,Ms. Iqra Saddique
+Friday,10:00 - 12:00,Computer Lab-10,Object Oriented Programming (Lab),BSDS-3A & BSAI-3A,Mr. Muhammad Shahzaib
+Friday,12:00 - 02:00,Computer Lab-10,Computer Organization & Assembly Language (Lab),BSAI-6A,Mr. Hafiz Asad Ali
+Friday,8:00 - 10:00,Auditorium (SE),Compuetr Networks (Lab),BSSE-4B,Mr. Muhammad Shahzaib
+Friday,10:00 - 12:00,Auditorium (SE),Linear Algebra,BSAI-4C,Mr. Muhammad Hamza
+Friday,12:00 - 02:00,Auditorium (SE),Data Warehousing & Business Intelligence,BSDS-8A,Mr. Syed Zeeshan Hussain
+Saturday,10:00 - 12:00,Lecture Room # 23,Freelancing,BSSE-7A,Mr. Ansar Naseem
+Saturday,08:00 - 10:00,Lecture Room # 24,Professional Practrices,BSSE-8B,Mr. Umair Iftikhar
+Saturday,10:00 - 12:00,Lecture Room # 24,Software Re-Engineering,BSSE-8A,Mr. Hammad Ur Rehman
+Saturday,08:00 - 10:00,Lecture Room # 25,Software Project Management,BSSE-7A,Mr. Hammad Ur Rehman
+Saturday,10:00 - 12:00,Lecture Room # 25,Operations Research,BSSE-8B,Mr. Hamza Hameed
+Saturday,12:00 - 02:00,Lecture Room # 25,Software Re-Engineering,BSSE-8C,Mr. Hammad Ur Rehman
+Saturday,08:00 - 10:00,Lecture Room # 26,Technical & Business Writing,BSSE-8A,Mr. Abdul Moiz
+Saturday,10:00 - 12:00,Lecture Room # 26,Professional Practrices,BSSE-8C,Mr. Umair Iftikhar
+Saturday,12:00 - 02:00,Lecture Room # 26,Operations Research,BSSE-8D,Mr. Hamza Hameed
+Saturday,08:00 - 10:00,Lecture Room # 27,Natutral Language Processing,BSAI-8A,Mr. Ansar Naseem
+Saturday,10:00 - 12:00,Lecture Room # 27,Technical & Business Writing,BSSE-8D,Mr. Abdul Moiz
+Saturday,08:00 - 10:00,Lecture Room # 28,Business Process Engineering,BSSE-6A,Ms. Irum Fatima
+Saturday,10:00 - 12:00,Lecture Room # 28,Data Visualization,BSDS-8A,Mr. Usman Baig
+Saturday,12:00 - 02:00,Lecture Room # 28,Big Data Analytics,BSDS-5A & BSDS-7A,Mr. Usman Baig
+Saturday,08:00 - 10:00,Lecture Room # 29,Machine Learning,BSSE-6B,Dr. Iftikhar Naseer
+Saturday,10:00 - 12:00,Lecture Room # 29,Foreign Language,BSSE-6A,Dr. Abdul Waheed
+Saturday,12:00 - 02:00,Lecture Room # 29,Knowledge Representation & Reasoning,BSAI-6A & BSAI-6C,Mr. Ansar Naseem
+Saturday,08:00 - 10:00,Auditorium (SE),Mobile Application Development,BSSE-6C,Mr. Muhammad Aqib
+Saturday,10:00 - 12:00,Auditorium (SE),Business Process Engineering,BSSE-6B,Ms. Irum Fatima
+Saturday,12:00 - 02:00,Auditorium (SE),Foreign Language,BSSE-6B,Dr. Abdul Waheed
+Saturday,10:00 - 12:00,Room No. 30,Mobile Application Development,BSSE-6D,Mr. Muhammad Aqib
+Saturday,12:00 - 02:00,Room No. 30,Software Quality Engineering,BSSE-6D,Mr. Sawail Khan
+Saturday,10:00 - 12:00,Computer Lab-7,Software Quality Engineering,BSSE-6C,Mr. Sawail Khan
+Saturday,12:00 - 02:00,Computer Lab-7,Mobile Application Development (Lab),BSSE-6A,Mr. Muhammad Abdullah
+Saturday,10:00 - 12:00,Computer Lab-8,Computer Organization & Assembly Language,BSAI-6A,Mr. Adeel Amjad
+Saturday,12:00 - 02:00,Computer Lab-8,Computer Organization & Assembly Language,BSAI-6B,Mr. Adeel Amjad
+Saturday,10:00 - 12:00,Computer Lab-10,Data Mining,BSDS-6A,Dr. Iftikhar Naseer
+Sunday,10:00 - 12:00,Lecture Room # 24,Software Re-Engineering,BSSE-8D,Mr. Hammad Ur Rehman
+Sunday,10:00 - 12:00,Lecture Room # 26,Foreign Language,BSSE-6C,Dr. Abdul Waheed
+Sunday,08:00 - 10:00,Lecture Room # 27,Foreign Language,BSSE-6D,Dr. Abdul Waheed
+Sunday,10:00 - 12:00,Lecture Room # 27,Business Process Engineering,BSSE-6D,Ms. Irum Fatima
+Sunday,12:00 - 02:00,Lecture Room # 27,Operations Research,BSSE-6D,Mr. Zahid Ali
+Sunday,08:00 - 10:00,Lecture Room # 28,Mobile Application Development,BSSE-6B,Mr. Muhammad Aqib
+Sunday,10:00 - 12:00,Lecture Room # 28,Operations Research,BSSE-6B,Mr. Zahid Ali
+Sunday,12:00 - 02:00,Lecture Room # 28,Software Quality Engineering,BSSE-6B,Mr. Sawail Khan
+Sunday,08:00 - 10:00,Lecture Room # 29,Software Re-Engineering,BSSE-8B,Mr. Hammad Ur Rehman
+Sunday,10:00 - 12:00,Lecture Room # 29,Computer Organization & Assembly Language,BSAI-6C & BSDS-6A,Mr. Adeel Amjad
+Sunday,12:00 - 02:00,Lecture Room # 29,Operations Research,BSSE-8A,Mr. Hamza Hameed
+Sunday,08:00 - 10:00,Computer Lab-7,Parallel & Distributed Computing,BSDS-7A & BSAI-7A,Mr. Adeel Amjad
+Sunday,10:00 - 12:00,Computer Lab-7,Technical & Business Writing,BSSE-8B,Mr. Abdul Moiz
+Sunday,12:00 - 02:00,Computer Lab-7,Knowledge Representation & Reasoning,BSAI-6B,Mr. Ansar Naseem
+Sunday,08:00 - 10:00,Computer Lab-8,Operations Research,BSSE-6A,Mr. Zahid Ali
+Sunday,10:00 - 12:00,Computer Lab-8,Software Quality Engineering,BSSE-6A,Mr. Sawail Khan
+Sunday,12:00 - 02:00,Computer Lab-8,Mobile Application Development (Lab),BSSE-6C,Mr. Muhammad Abdullah
+Sunday,08:00 - 10:00,Computer Lab-10,Business Process Engineering,BSSE-6C,Ms. Irum Fatima
+Sunday,10:00 - 12:00,Computer Lab-10,Operations Research,BSSE-8C,Mr. Hamza Hameed
+Sunday,08:00 - 10:00,Auditorium (SE),Technical & Business Writing,BSSE-8C,Mr. Abdul Moiz
+Sunday,10:00 - 12:00,Auditorium (SE),Professional Practrices,BSSE-8A & BSDS-8A,Mr. Umair Iftikhar
+Sunday,12:00 - 02:00,Auditorium (SE),Professional Practrices,BSSE-8D & BSAI-8A,Mr. Umair Iftikhar
