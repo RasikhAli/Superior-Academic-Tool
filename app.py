@@ -27,11 +27,17 @@ timetable_info = "Fall 2025 - Version 1.10"  # Default fallback
 def create_folder_structure():
     folders = ['uploads', 'uploads/csv', 'uploads/xlsx', 'static']
     for folder in folders:
-        if not os.path.exists(folder):
-            os.makedirs(folder)
+        try:
+            if not os.path.exists(folder):
+                os.makedirs(folder, exist_ok=True)
+        except Exception as e:
+            print(f"Warning: Could not create folder {folder}: {e}")
 
 # Initialize folder structure
-create_folder_structure()
+try:
+    create_folder_structure()
+except Exception as e:
+    print(f"Warning: Could not initialize folder structure: {e}")
 
 # Store timetable data for each teacher
 timetable_data = {}
@@ -46,11 +52,15 @@ current_csv_file = None
 
 def get_latest_xlsx_file():
     """Get the latest xlsx file from uploads/xlsx folder"""
-    xlsx_files = glob.glob('uploads/xlsx/*.xlsx')
-    if not xlsx_files:
-        print("nothing new")
+    try:
+        xlsx_files = glob.glob('uploads/xlsx/*.xlsx')
+        if not xlsx_files:
+            print("nothing new")
+            return None
+        return max(xlsx_files, key=os.path.getmtime)
+    except Exception as e:
+        print(f"Error finding xlsx files: {e}")
         return None
-    return max(xlsx_files, key=os.path.getmtime)
 
 def convert_xlsx_to_csv():
     """Convert latest xlsx file to csv using converter.py"""
@@ -72,6 +82,8 @@ def convert_xlsx_to_csv():
         return output_filename
     except Exception as e:
         print(f"Error converting xlsx to csv: {e}")
+        import traceback
+        traceback.print_exc()
         return None
 
 def get_current_csv_file():
@@ -79,24 +91,30 @@ def get_current_csv_file():
     global current_csv_file
     
     # Check if we need to convert xlsx to csv
-    latest_xlsx = get_latest_xlsx_file()
-    if latest_xlsx:
-        expected_csv = 'uploads/csv/' + os.path.splitext(os.path.basename(latest_xlsx))[0] + '.csv'
-        
-        # Convert if CSV doesn't exist or xlsx is newer
-        if not os.path.exists(expected_csv) or os.path.getmtime(latest_xlsx) > os.path.getmtime(expected_csv):
-            print("Converting latest xlsx to csv...")
-            converted_csv = convert_xlsx_to_csv()
-            if converted_csv:
-                current_csv_file = converted_csv
-        else:
-            current_csv_file = expected_csv
+    try:
+        latest_xlsx = get_latest_xlsx_file()
+        if latest_xlsx:
+            expected_csv = 'uploads/csv/' + os.path.splitext(os.path.basename(latest_xlsx))[0] + '.csv'
+            
+            # Convert if CSV doesn't exist or xlsx is newer
+            if not os.path.exists(expected_csv) or os.path.getmtime(latest_xlsx) > os.path.getmtime(expected_csv):
+                print("Converting latest xlsx to csv...")
+                converted_csv = convert_xlsx_to_csv()
+                if converted_csv:
+                    current_csv_file = converted_csv
+            else:
+                current_csv_file = expected_csv
+    except Exception as e:
+        print(f"Error in xlsx processing: {e}")
     
     # Fallback to any existing CSV in csv folder
     if not current_csv_file or not os.path.exists(current_csv_file):
-        csv_files = glob.glob('uploads/csv/*.csv')
-        if csv_files:
-            current_csv_file = max(csv_files, key=os.path.getmtime)
+        try:
+            csv_files = glob.glob('uploads/csv/*.csv')
+            if csv_files:
+                current_csv_file = max(csv_files, key=os.path.getmtime)
+        except Exception as e:
+            print(f"Error finding csv files: {e}")
     
     return current_csv_file
 
@@ -237,7 +255,11 @@ def index():
     global last_modified, timetable_info
 
     # Get current CSV file (will convert if needed)
-    csv_file = get_current_csv_file()
+    try:
+        csv_file = get_current_csv_file()
+    except Exception as e:
+        print(f"Error getting CSV file: {e}")
+        csv_file = None
 
     if not csv_file or not os.path.exists(csv_file):
         return render_template('index.html',
@@ -247,24 +269,53 @@ def index():
                              timetable_info=timetable_info)
 
     # Check if file has been modified
-    current_modified = os.path.getmtime(csv_file)
+    try:
+        current_modified = os.path.getmtime(csv_file)
+    except Exception as e:
+        print(f"Error getting file modified time: {e}")
+        current_modified = None
+        
     if last_modified != current_modified:
-        process_file(csv_file)
-        last_modified = current_modified
+        try:
+            process_file(csv_file)
+            last_modified = current_modified
+        except Exception as e:
+            print(f"Error processing file: {e}")
+            return render_template('index.html',
+                                 table_html=f"<p>Error processing timetable file: {str(e)}</p>",
+                                 teacher_names=[],
+                                 semester_info="Error",
+                                 timetable_info=timetable_info)
 
     # Extract semester info from filename
-    semester_info = extract_semester_info(csv_file)
+    try:
+        semester_info = extract_semester_info(csv_file)
+    except Exception as e:
+        print(f"Error extracting semester info: {e}")
+        semester_info = "Unknown"
 
     # Extract timetable info from the xlsx filename (not csv)
-    latest_xlsx = get_latest_xlsx_file()
-    if latest_xlsx:
-        timetable_info = extract_timetable_info(latest_xlsx)
+    try:
+        latest_xlsx = get_latest_xlsx_file()
+        if latest_xlsx:
+            timetable_info = extract_timetable_info(latest_xlsx)
+    except Exception as e:
+        print(f"Error extracting timetable info: {e}")
 
-    table_html = generate_cards_html()
-    sorted_teachers = sort_teachers_by_prefix_and_name(teacher_names)
+    try:
+        table_html = generate_cards_html()
+        sorted_teachers = sort_teachers_by_prefix_and_name(teacher_names)
+    except Exception as e:
+        print(f"Error generating cards: {e}")
+        table_html = ""
+        sorted_teachers = []
     
     # Format last modified date
-    last_updated = datetime.fromtimestamp(last_modified).strftime('%b %d, %Y') if last_modified else "N/A"
+    try:
+        last_updated = datetime.fromtimestamp(last_modified).strftime('%b %d, %Y') if last_modified else "N/A"
+    except Exception as e:
+        print(f"Error formatting date: {e}")
+        last_updated = "N/A"
 
     return render_template('index.html',
                          table_html=table_html,
@@ -560,10 +611,14 @@ def sort_teachers_by_prefix_and_name(teachers):
         return len(prefix_hierarchy)  # Return a high value if no prefix is found
 
     # Sort teachers first by prefix key, then by name
-    sorted_teachers = sorted(
-        teachers,
-        key=lambda teacher: (prefix_key(teacher), teacher)
-    )
+    try:
+        sorted_teachers = sorted(
+            teachers,
+            key=lambda teacher: (prefix_key(teacher), teacher)
+        )
+    except Exception as e:
+        print(f"Error sorting teachers: {e}")
+        sorted_teachers = list(teachers)
     
     return sorted_teachers
 

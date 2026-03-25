@@ -4,10 +4,7 @@ import os
 import math
 
 # Create a blueprint for ShadowText Studio
-shadowtext_bp = Blueprint('shadowtext', __name__, 
-                          template_folder='ShadowText Studio/templates',
-                          static_folder='ShadowText Studio/static',
-                          static_url_path='/shadowtext/static')
+shadowtext_bp = Blueprint('shadowtext', __name__)
 
 def generate_image(name, color_top, color_bottom, alpha=10.0, shadow_angle=45, font_size=120):
     width, height = 800, 1200
