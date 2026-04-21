@@ -56,6 +56,31 @@ $(document).ready(function () {
 
     // Load teacher records initially
     loadTeacherRecords();
+
+    // Add global debug functions for testing
+    window.debugTeacherNames = function() {
+        console.log('=== DEBUG: Teacher Names Comparison ===');
+
+        // Get teacher names from dropdown
+        const teacherSelect = document.getElementById('teacher-search');
+        if (teacherSelect) {
+            const dropdownNames = Array.from(teacherSelect.options).map(opt => opt.text).filter(name => name.trim() !== '');
+            console.log('Dropdown teacher names:', dropdownNames);
+        }
+
+        // Get teacher names from records
+        fetch('/get_teachers')
+            .then(response => response.json())
+            .then(teachers => {
+                const recordNames = teachers.map(t => t.name);
+                console.log('Record teacher names:', recordNames);
+
+                // Find mismatches
+                const dropdownNames = Array.from(document.getElementById('teacher-search').options).map(opt => opt.text).filter(name => name.trim() !== '');
+                const mismatches = recordNames.filter(name => !dropdownNames.includes(name));
+                console.log('Teachers in records but not in dropdown:', mismatches);
+            });
+    };
 });
 
 // Sidebar functionality
@@ -736,41 +761,97 @@ function loadTeacherRecords() {
                 const imageUrl = teacher.image ? teacher.image : '/static/faculty/profile.png';
                 const subjects = teacher.subjects || 'None';
                 const sections = teacher.sections || 'None';
+                const subjectCount = teacher.subjects ? teacher.subjects.split(', ').length : 0;
+                const sectionCount = teacher.sections ? teacher.sections.split(', ').length : 0;
+
+                // Generate subject badges
+                const subjectBadges = subjects !== 'None' ? subjects.split(', ').map(subject =>
+                    `<span class="badge badge-subject">${subject.trim()}</span>`
+                ).join(' ') : '<span class="text-muted">No subjects assigned</span>';
+
+                // Generate section badges
+                const sectionBadges = sections !== 'None' ? sections.split(', ').map(section =>
+                    `<span class="badge badge-section">${section.trim()}</span>`
+                ).join(' ') : '<span class="text-muted">No sections assigned</span>';
 
                 html += `
-                    <div class="col-lg-4 col-md-6 mb-4">
-                        <div class="card teacher-record-card h-100 shadow-sm">
-                            <div class="card-body d-flex flex-column">
-                                <div class="text-center mb-3">
-                                    <img src="${imageUrl}" alt="${teacher.name}" class="teacher-image rounded-circle mb-3" style="width: 80px; height: 80px; object-fit: cover; border: 3px solid #e9ecef;">
-                                    <h6 class="card-title font-weight-bold mb-1">${teacher.name}</h6>
-                                    <small class="text-muted">${teacher.designation || 'Faculty'}</small>
+                    <div class="col-xl-4 col-lg-6 col-md-12 mb-4">
+                        <div class="teacher-card-wrapper">
+                            <div class="teacher-card-modern">
+                                <!-- Header Section -->
+                                <div class="teacher-card-header">
+                                    <div class="teacher-avatar-container">
+                                        <img src="${imageUrl}" alt="Profile picture of ${teacher.name}" class="teacher-avatar">
+                                        <div class="teacher-avatar-overlay">
+                                            <i class="fas fa-user-graduate" aria-hidden="true"></i>
+                                        </div>
+                                    </div>
+                                    <div class="teacher-basic-info">
+                                        <h5 class="teacher-name">${teacher.name}</h5>
+                                        <span class="teacher-designation">${teacher.designation || 'Faculty Member'}</span>
+                                        <div class="teacher-stats">
+                                            <span class="stat-item" title="Number of subjects">
+                                                <i class="fas fa-book-open" aria-hidden="true"></i>
+                                                <span>${subjectCount}</span>
+                                            </span>
+                                            <span class="stat-item" title="Number of sections">
+                                                <i class="fas fa-users" aria-hidden="true"></i>
+                                                <span>${sectionCount}</span>
+                                            </span>
+                                        </div>
+                                    </div>
                                 </div>
 
-                                <div class="teacher-info flex-grow-1">
-                                    <div class="info-row">
-                                        <div class="info-label">Emp. Code:</div>
-                                        <div class="info-value">${teacher.employee_code || 'Not specified'}</div>
+                                <!-- Quick Info Section -->
+                                <div class="teacher-quick-info">
+                                    <div class="quick-info-row">
+                                        <div class="quick-info-item">
+                                            <i class="fas fa-id-badge" aria-hidden="true"></i>
+                                            <span class="info-label">ID:</span>
+                                            <span class="info-value">${teacher.employee_code || 'Not Assigned'}</span>
+                                        </div>
+                                        <div class="quick-info-item">
+                                            <i class="fas fa-map-marker-alt" aria-hidden="true"></i>
+                                            <span class="info-label">Office:</span>
+                                            <span class="info-value">${teacher.office_number || 'Not Specified'}</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Subjects & Sections -->
+                                <div class="teacher-details-section">
+                                    <div class="detail-group">
+                                        <div class="detail-header">
+                                            <i class="fas fa-graduation-cap" aria-hidden="true"></i>
+                                            <span>Subjects</span>
+                                        </div>
+                                        <div class="detail-content badges-container">
+                                            ${subjectBadges}
+                                        </div>
                                     </div>
 
-                                    <div class="info-row">
-                                        <div class="info-label">Office:</div>
-                                        <div class="info-value">${teacher.office_number || 'Not specified'}</div>
+                                    <div class="detail-group">
+                                        <div class="detail-header">
+                                            <i class="fas fa-school" aria-hidden="true"></i>
+                                            <span>Sections</span>
+                                        </div>
+                                        <div class="detail-content badges-container">
+                                            ${sectionBadges}
+                                        </div>
                                     </div>
+                                </div>
 
-                                    <div class="info-row">
-                                        <div class="info-label">Email:</div>
-                                        <div class="info-value">${teacher.superior_email || 'Not specified'}</div>
-                                    </div>
-
-                                    <div class="info-row">
-                                        <div class="info-label">Subjects:</div>
-                                        <div class="info-value">${subjects}</div>
-                                    </div>
-
-                                    <div class="info-row">
-                                        <div class="info-label">Sections:</div>
-                                        <div class="info-value">${sections}</div>
+                                <!-- Contact & Actions Footer -->
+                                <div class="teacher-card-footer">
+                                    <div class="teacher-actions">
+                                        <button class="action-btn primary" onclick="viewTeacherSchedule('${teacher.name.replace(/'/g, '\\\'')}')" aria-label="View schedule for ${teacher.name}">
+                                            <i class="fas fa-calendar-alt" aria-hidden="true"></i>
+                                            Schedule
+                                        </button>
+                                        <button class="action-btn secondary" onclick="contactTeacher('${teacher.name.replace(/'/g, '\\\'')}', '${(teacher.superior_email || '').replace(/'/g, '\\\'')}')" aria-label="Contact ${teacher.name}" ${!teacher.superior_email ? 'disabled' : ''}>
+                                            <i class="fas fa-envelope" aria-hidden="true"></i>
+                                            Contact
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -785,4 +866,93 @@ function loadTeacherRecords() {
             console.error('Error loading teacher records:', error);
             container.innerHTML = '<div class="text-center text-danger"><i class="fas fa-exclamation-triangle fa-2x mb-3"></i><p>Error loading teacher records. Please try again.</p></div>';
         });
+}
+
+// Teacher card action functions
+function viewTeacherSchedule(teacherName) {
+    console.log('View Schedule clicked for:', teacherName);
+
+    // Navigate to teacher timetable section
+    showSection('teacher-timetable');
+
+    // Load the timetable directly via API (more reliable than dropdown matching)
+    setTimeout(() => {
+        console.log('Loading timetable for:', teacherName);
+        loadTeacherTimetableDirectly(teacherName);
+    }, 200);
+}
+
+function loadTeacherTimetableDirectly(teacherName) {
+    console.log('Loading timetable directly for:', teacherName);
+    const container = document.getElementById('teacher-timetable-container');
+
+    if (!container) {
+        console.error('Teacher timetable container not found');
+        alert('Teacher timetable section could not be loaded.');
+        return;
+    }
+
+    // Show loading
+    container.innerHTML = '<div class="text-center"><i class="fas fa-spinner fa-spin fa-2x"></i><p>Loading timetable...</p></div>';
+
+    // Try to fetch the timetable directly
+    fetch(`/timetable?name=${encodeURIComponent(teacherName)}&type=teacher`)
+        .then(response => {
+            console.log('API response status:', response.status);
+            return response.json();
+        })
+        .then(data => {
+            console.log('Received data:', data.length, 'entries');
+
+            if (data.length === 0) {
+                container.innerHTML = '<div class="text-center text-muted"><i class="fas fa-info-circle fa-2x mb-3"></i><p>No timetable found for this teacher.</p></div>';
+                return;
+            }
+
+            // Sort the data and remove duplicates
+            const sortedData = sortEntriesByDayAndTime(data);
+            const uniqueData = removeDuplicateEntries(sortedData);
+            container.innerHTML = generateTeacherTimetableHTML(teacherName, uniqueData);
+
+            // Also update the dropdown if it exists to show the selected teacher
+            const teacherSelect = document.getElementById('teacher-search');
+            if (teacherSelect) {
+                // Try to find the teacher in options, or set custom value
+                let found = false;
+                const options = teacherSelect.options;
+                for (let i = 0; i < options.length; i++) {
+                    if (options[i].text.trim() === teacherName.trim()) {
+                        teacherSelect.value = options[i].value;
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found) {
+                    // If not found, create a temporary option or just leave it
+                    console.log('Teacher not found in dropdown options');
+                }
+            }
+
+            console.log('Timetable loaded successfully for:', teacherName);
+        })
+        .catch(error => {
+            console.error('Error loading teacher timetable:', error);
+            container.innerHTML = '<div class="text-center text-danger"><i class="fas fa-exclamation-triangle fa-2x mb-3"></i><p>Error loading timetable. Please try again.</p></div>';
+        });
+}
+
+function contactTeacher(teacherName, email) {
+    console.log('Contact clicked for:', teacherName, 'Email:', email);
+
+    if (email && email !== 'Not Provided' && email.trim() !== '') {
+        // Create a mailto link
+        const subject = encodeURIComponent('Regarding Academic Matters');
+        const body = encodeURIComponent(`Dear ${teacherName},\n\nI hope this email finds you well.\n\nBest regards,\n[Your Name]`);
+        console.log('Opening mailto link:', `mailto:${email}?subject=${subject}&body=${body}`);
+        window.location.href = `mailto:${email}?subject=${subject}&body=${body}`;
+    } else {
+        // Show a message if no email is available
+        console.log('No email available for:', teacherName);
+        alert(`Contact information for ${teacherName} is not available. Please check with the administration.`);
+    }
 }
