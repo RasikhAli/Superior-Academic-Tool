@@ -53,6 +53,9 @@ $(document).ready(function () {
 
     // Load all room timetables initially
     loadAllRoomTimetables();
+
+    // Load teacher records initially
+    loadTeacherRecords();
 });
 
 // Sidebar functionality
@@ -713,4 +716,73 @@ function mergeConsecutiveSlots(entries) {
     // Add the last entry
     merged.push(current);
     return merged;
+}
+
+// Load teacher records
+function loadTeacherRecords() {
+    const container = document.getElementById('teacher-records-container');
+    container.innerHTML = '<div class="text-center"><i class="fas fa-spinner fa-spin fa-2x"></i><p>Loading teacher records...</p></div>';
+
+    fetch('/get_teachers')
+        .then(response => response.json())
+        .then(teachers => {
+            if (teachers.length === 0) {
+                container.innerHTML = '<div class="text-center text-muted"><i class="fas fa-info-circle fa-2x mb-3"></i><p>No teacher records found.</p></div>';
+                return;
+            }
+
+            let html = '';
+            teachers.forEach(teacher => {
+                const imageUrl = teacher.image ? teacher.image : '/static/faculty/profile.png';
+                const subjects = teacher.subjects || 'None';
+                const sections = teacher.sections || 'None';
+
+                html += `
+                    <div class="col-lg-4 col-md-6 mb-4">
+                        <div class="card teacher-record-card h-100 shadow-sm">
+                            <div class="card-body d-flex flex-column">
+                                <div class="text-center mb-3">
+                                    <img src="${imageUrl}" alt="${teacher.name}" class="teacher-image rounded-circle mb-3" style="width: 80px; height: 80px; object-fit: cover; border: 3px solid #e9ecef;">
+                                    <h6 class="card-title font-weight-bold mb-1">${teacher.name}</h6>
+                                    <small class="text-muted">${teacher.designation || 'Faculty'}</small>
+                                </div>
+
+                                <div class="teacher-info flex-grow-1">
+                                    <div class="info-row">
+                                        <div class="info-label">Emp. Code:</div>
+                                        <div class="info-value">${teacher.employee_code || 'Not specified'}</div>
+                                    </div>
+
+                                    <div class="info-row">
+                                        <div class="info-label">Office:</div>
+                                        <div class="info-value">${teacher.office_number || 'Not specified'}</div>
+                                    </div>
+
+                                    <div class="info-row">
+                                        <div class="info-label">Email:</div>
+                                        <div class="info-value">${teacher.superior_email || 'Not specified'}</div>
+                                    </div>
+
+                                    <div class="info-row">
+                                        <div class="info-label">Subjects:</div>
+                                        <div class="info-value">${subjects}</div>
+                                    </div>
+
+                                    <div class="info-row">
+                                        <div class="info-label">Sections:</div>
+                                        <div class="info-value">${sections}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+        })
+        .catch(error => {
+            console.error('Error loading teacher records:', error);
+            container.innerHTML = '<div class="text-center text-danger"><i class="fas fa-exclamation-triangle fa-2x mb-3"></i><p>Error loading teacher records. Please try again.</p></div>';
+        });
 }

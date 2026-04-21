@@ -1779,6 +1779,119 @@ body {
     }
 }
 
+/* Teacher Record Cards */
+.teacher-record-card {
+    border: none;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    background: white;
+}
+
+[data-bs-theme="dark"] .teacher-record-card {
+    background: #374151;
+    border: 1px solid #4b5563;
+}
+
+.teacher-record-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+
+.teacher-image {
+    transition: transform 0.3s ease;
+}
+
+.teacher-record-card:hover .teacher-image {
+    transform: scale(1.05);
+}
+
+.teacher-info {
+    font-size: 0.875rem;
+    padding: 1rem;
+    background: #f8f9fa;
+    border-radius: 8px;
+    margin: 0.5rem 0;
+}
+
+[data-bs-theme="dark"] .teacher-info {
+    background: #4b5563;
+}
+
+.info-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #e9ecef;
+}
+
+[data-bs-theme="dark"] .info-row {
+    border-bottom: 1px solid #6b7280;
+}
+
+.info-row:last-child {
+    border-bottom: none;
+}
+
+.info-label {
+    font-weight: 600;
+    color: var(--text-secondary);
+    min-width: 80px;
+    flex-shrink: 0;
+}
+
+.info-value {
+    color: var(--text-primary);
+    word-break: break-word;
+    text-align: right;
+    flex-grow: 1;
+    font-weight: 500;
+}
+
+[data-bs-theme="dark"] .info-label {
+    color: #9ca3af;
+}
+
+[data-bs-theme="dark"] .info-value {
+    color: #f3f4f6;
+}
+
+/* Updated card title styling for Total Teachers */
+.card-title .card-value {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--primary-color);
+    margin: 0.5rem 0;
+}
+
+.card-title .card-description {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-top: 0.25rem;
+}
+
+@media (max-width: 768px) {
+    .teacher-record-card .card-body {
+        padding: 1rem;
+    }
+
+    .teacher-image {
+        width: 60px !important;
+        height: 60px !important;
+    }
+
+    .info-label {
+        min-width: 70px;
+        font-size: 0.8rem;
+    }
+
+    .info-value {
+        font-size: 0.8rem;
+    }
+}
+
 @media (max-width: 480px) {
     .university-nav-name {
         font-size: 0.8rem;

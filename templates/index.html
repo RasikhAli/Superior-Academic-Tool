@@ -31,18 +31,13 @@
             <small>Academic Management Portal</small>
         </div>
         <ul class="sidebar-menu">
-            <li><a href="#" onclick="showSection('dashboard')" class="active"><i class="fas fa-home"></i> Dashboard</a>
-            </li>
-            <li><a href="#" onclick="showSection('teacher-timetable')"><i class="fas fa-chalkboard-teacher"></i> Teacher
-                    Timetable</a></li>
-            <li><a href="#" onclick="showSection('section-timetable')"><i class="fas fa-users"></i> Section
-                    Timetable</a></li>
-            <li><a href="#" onclick="showSection('room-timetable')"><i class="fas fa-door-open"></i> Room Timetable</a>
-            </li>
-            <li class="nav-item"><a class="nav-link" href="#" onclick="showSection('cgpa-calculator')"><i
-                        class="fas fa-calculator mr-2"></i>CGPA Calculator</a></li>
-            <li class="nav-item"><a class="nav-link" href="#" onclick="showSection('shadowtext-studio')"><i
-                        class="fas fa-text-height mr-2"></i>ShadowText Studio</a></li>
+            <li><a href="#" onclick="showSection('dashboard')" class="active"><i class="fas fa-home"></i> Dashboard</a></li>
+            <li><a href="#" onclick="showSection('teacher-records')"><i class="fas fa-address-book"></i> Teacher Records</a></li>
+            <li><a href="#" onclick="showSection('teacher-timetable')"><i class="fas fa-chalkboard-teacher"></i> Teacher Timetable</a></li>
+            <li><a href="#" onclick="showSection('section-timetable')"><i class="fas fa-users"></i> Section Timetable</a></li>
+            <li><a href="#" onclick="showSection('room-timetable')"><i class="fas fa-door-open"></i> Room Timetable</a></li>
+            <li class="nav-item"><a class="nav-link" href="#" onclick="showSection('cgpa-calculator')"><i class="fas fa-calculator mr-2"></i>CGPA Calculator</a></li>
+            <li class="nav-item"><a class="nav-link" href="#" onclick="showSection('shadowtext-studio')"><i class="fas fa-text-height mr-2"></i>ShadowText Studio</a></li>
             <li><a href="#" onclick="showSection('schedule')"><i class="fas fa-clock"></i> Schedule</a></li>
             <li><a href="#" onclick="showSection('settings')"><i class="fas fa-cog"></i> Settings</a></li>
         </ul>
@@ -114,8 +109,10 @@
                                 <div class="card-body">
                                     <i class="fas fa-chalkboard-teacher card-icon"></i>
                                     <h5 class="card-title">Total Teachers</h5>
-                                    <div class="card-value">{{ teacher_names|length }}</div>
-                                    <div class="card-description">Active Faculty</div>
+                                    <div lass="card-count" id="teacher-count">{{ teacher_names|length }} Active Faculty</div>
+                                    <button class="btn btn-primary btn-sm mt-2" onclick="showSection('teacher-records')">
+                                        <i class="fas fa-eye mr-1"></i>View
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -215,6 +212,19 @@
 
                     <div id="teacher-timetable-container">
                         <!-- Content will be loaded here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Teacher Records Section -->
+            <div id="teacher-records" class="content-section">
+                <div class="content-container">
+                    <h2 class="page-title">
+                        <i class="fas fa-address-book mr-3"></i>Teacher Records
+                    </h2>
+
+                    <div class="row" id="teacher-records-container">
+                        <!-- Teacher cards will be loaded here -->
                     </div>
                 </div>
             </div>

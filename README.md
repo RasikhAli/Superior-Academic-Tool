@@ -15,10 +15,11 @@ A comprehensive academic management platform designed to streamline educational 
 - **Teacher Timetables**: View and manage individual teacher schedules with hierarchical name parsing (Dr, Prof, Ms, etc.).
 - **Section Timetables**: Access class section schedules with automatic group expansion (e.g., BSSE-5A & 5B).
 - **Room/Lab Timetables**: Dedicated view for room and laboratory schedules to track occupancy.
+- **Teacher Records**: Comprehensive teacher profiles with subjects taught, sections assigned, contact info, and designations.
 - **Semester Identification**: Automatically extracts semester info (e.g., Fall-25 & Spring-26) from filenames.
 - **Smart Search**: Quick search functionality with Select2 integration and autocomplete.
 - **Automatic Conversion**: Robust XLSX to CSV conversion with real-time file modification tracking.
-- **Export Options**: Download semester-specific timetables as Excel files directly from the dashboard.
+- **Export Options**: Download data as Excel files directly from the dashboard and APIs.
 
 ### 🎓 CGPA Calculator
 - **Semester GPA Calculation**: Calculate current semester GPA (SGPA) based on marks and credit hours.
@@ -58,7 +59,8 @@ Superior-Academic-Tool/
 │   ├── script.js             # Core frontend logic, AJAX handlers, and UI interactions
 │   └── ...                   # Asset files and generated outputs
 ├── uploads/                  # Data storage
-│   ├── csv/                  # Converted CSV timetable files
+│   ├── csv/                  # Converted CSV timetable files and teacher records
+│   │   └── teachers-record.csv # Generated teacher records file
 │   └── xlsx/                 # Source XLSX timetable files
 └── venv/                     # Virtual environment
 ```
@@ -100,13 +102,42 @@ python app.py
 5. **Access the Dashboard:**
 Navigate to `http://127.0.0.1:5000` (or `http://localhost:10000` depending on environment).
 
+## 🌐 API Endpoints
+
+The application provides comprehensive REST API endpoints for programmatic access:
+
+### Timetable APIs
+- `GET /timetable` - Get all timetable entries (JSON)
+- `GET /timetable/xlsx` - Download all timetable entries as Excel
+- `GET /timetable?name=<name>&type=teacher` - Get specific teacher timetable
+- `GET /timetable?name=<name>&type=section` - Get specific section timetable
+- `GET /timetable?name=<name>&type=room` - Get specific room timetable
+
+### Data Retrieval APIs
+- `GET /get_teachers` - Get all teacher records (JSON)
+- `GET /get_teachers/xlsx` - Download teacher records as Excel
+- `GET /get_sections` - Get all unique sections (JSON)
+- `GET /get_sections/xlsx` - Download sections as Excel
+- `GET /get_rooms` - Get all unique rooms (JSON)
+- `GET /get_rooms/xlsx` - Download rooms as Excel
+
+### Specialized APIs
+- `GET /cgpa/calculate` - Calculate CGPA (POST with form data)
+- `POST /shadowtext/generate` - Generate shadow text image
+- `GET /shadowtext/download` - Download generated image
+- `GET /shadowtext/crop` - Download cropped image
+- `GET /section/<int:semester>` - Get timetable for specific semester
+- `GET /section/<int:semester>/download` - Download semester timetable as Excel
+
 ## 📖 Usage Guide
 
 ### Timetable Management
 
 1. **Upload Data**: Place XLSX timetable files in `uploads/xlsx/`. The app detects the latest file and updates automatically.
 2. **Search**: Use the dropdowns in the Teacher, Section, or Room sections to filter data.
-3. **Downloads**: In the Section Timetable area, use the dedicated download buttons to get specific semester schedules in Excel format.
+3. **Teacher Records**: Click on "Total Teachers" card or navigate to Teacher Records section to view detailed teacher profiles.
+4. **Downloads**: In the Section Timetable area, use the dedicated download buttons to get specific semester schedules in Excel format.
+5. **API Access**: Use the provided API endpoints to integrate with external systems or download data in Excel format.
 
 ### CGPA Calculator
 
