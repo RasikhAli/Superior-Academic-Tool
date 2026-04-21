@@ -758,7 +758,7 @@ function loadTeacherRecords() {
 
             let html = '';
             teachers.forEach(teacher => {
-                const imageUrl = teacher.image ? teacher.image : '/static/faculty/profile.png';
+                const imageUrl = teacher.image ? teacher.image.replace(/ /g, '%20') : '/static/faculty/profile.png';
                 const subjects = teacher.subjects || 'None';
                 const sections = teacher.sections || 'None';
                 const subjectCount = teacher.subjects ? teacher.subjects.split(', ').length : 0;
