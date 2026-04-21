@@ -15,7 +15,7 @@ A comprehensive academic management platform designed to streamline educational 
 - **Teacher Timetables**: View and manage individual teacher schedules with hierarchical name parsing (Dr, Prof, Ms, etc.).
 - **Section Timetables**: Access class section schedules with automatic group expansion (e.g., BSSE-5A & 5B).
 - **Room/Lab Timetables**: Dedicated view for room and laboratory schedules to track occupancy.
-- **Teacher Records**: Comprehensive teacher profiles with subjects taught, sections assigned, contact info, and designations.
+- **Teacher Records**: Enhanced teacher profiles with modern card-based UI featuring visual badges for subjects and sections, responsive grid layout, quick access contact information, and detailed professional designations.
 - **Semester Identification**: Automatically extracts semester info (e.g., Fall-25 & Spring-26) from filenames.
 - **Smart Search**: Quick search functionality with Select2 integration and autocomplete.
 - **Automatic Conversion**: Robust XLSX to CSV conversion with real-time file modification tracking.
@@ -37,6 +37,12 @@ A comprehensive academic management platform designed to streamline educational 
 
 ### 🎯 User Interface
 - **Modern Dashboard**: Professional card-based layout with real-time stats (Total Teachers, Sections, Rooms).
+- **Enhanced Teacher Cards**: Redesigned teacher profile cards with:
+  - Color-coded badges for subjects (green) and sections (orange)
+  - Responsive grid layout (3 cards per row on large screens, 2 on medium, 1 on mobile)
+  - Quick info section showing ID and office details
+  - Direct email contact links with hover effects
+  - Improved visual hierarchy and spacing
 - **Persistent Sidebar**: Improved navigation with quick access to all modules and developer info.
 - **Dynamic Theme Engine**: Toggle between Sun (Light) and Moon (Dark) modes with persistent local storage.
 - **Last Updated Tracking**: Header display showing exactly when the current data was last modified.
@@ -135,7 +141,7 @@ The application provides comprehensive REST API endpoints for programmatic acces
 
 1. **Upload Data**: Place XLSX timetable files in `uploads/xlsx/`. The app detects the latest file and updates automatically.
 2. **Search**: Use the dropdowns in the Teacher, Section, or Room sections to filter data.
-3. **Teacher Records**: Click on "Total Teachers" card or navigate to Teacher Records section to view detailed teacher profiles.
+3. **Teacher Records**: Click on "Total Teachers" card or navigate to Teacher Records section to view enhanced teacher profiles with visual subject/section badges, responsive card layout, and direct contact options.
 4. **Downloads**: In the Section Timetable area, use the dedicated download buttons to get specific semester schedules in Excel format.
 5. **API Access**: Use the provided API endpoints to integrate with external systems or download data in Excel format.
 
