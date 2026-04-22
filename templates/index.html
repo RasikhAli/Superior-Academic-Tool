@@ -223,6 +223,88 @@
                         <i class="fas fa-address-book mr-3"></i>Teacher Records
                     </h2>
 
+                    <!-- Search and Filter Controls -->
+                    <div class="teacher-controls-wrapper mb-5">
+                        <div class="teacher-controls-card">
+                            <div class="controls-header">
+                                <div class="controls-icon">
+                                    <i class="fas fa-filter"></i>
+                                </div>
+                                <div class="controls-title">
+                                    <h4>Filter & Search Teachers</h4>
+                                    <p>Find teachers by name, subject, section, or other criteria</p>
+                                </div>
+                            </div>
+
+                            <div class="controls-body">
+                                <div class="control-row">
+                                    <!-- Search Input -->
+                                    <div class="control-group search-group">
+                                        <div class="control-icon">
+                                            <i class="fas fa-search"></i>
+                                        </div>
+                                        <div class="control-content">
+                                            <label for="teacher-search-input">Search Teachers</label>
+                                            <input type="text" class="modern-input" id="teacher-search-input" placeholder="Type name, subject, section...">
+                                        </div>
+                                    </div>
+
+                                    <!-- Subject Filter -->
+                                    <div class="control-group">
+                                        <div class="control-icon">
+                                            <i class="fas fa-book-open"></i>
+                                        </div>
+                                        <div class="control-content">
+                                            <label for="teacher-filter-subject">Subject</label>
+                                            <select class="modern-select" id="teacher-filter-subject">
+                                                <option value="">All Subjects</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <!-- Section Filter -->
+                                    <div class="control-group">
+                                        <div class="control-icon">
+                                            <i class="fas fa-users"></i>
+                                        </div>
+                                        <div class="control-content">
+                                            <label for="teacher-filter-section">Section</label>
+                                            <select class="modern-select" id="teacher-filter-section">
+                                                <option value="">All Sections</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <!-- Sort By -->
+                                    <div class="control-group">
+                                        <div class="control-icon">
+                                            <i class="fas fa-sort-amount-down"></i>
+                                        </div>
+                                        <div class="control-content">
+                                            <label for="teacher-sort-by">Sort By</label>
+                                            <select class="modern-select" id="teacher-sort-by">
+                                                <option value="name">Name</option>
+                                                <option value="designation">Designation</option>
+                                                <option value="subjects">Subjects</option>
+                                                <option value="sections">Sections</option>
+                                                <option value="employee_code">ID</option>
+                                                <option value="office_number">Office</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <!-- Clear Filters -->
+                                    <div class="control-group action-group">
+                                        <button class="modern-btn clear-btn" onclick="clearTeacherFilters()">
+                                            <i class="fas fa-times"></i>
+                                            <span>Clear All</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="row" id="teacher-records-container">
                         <!-- Teacher cards will be loaded here -->
                     </div>

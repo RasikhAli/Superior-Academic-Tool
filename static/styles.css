@@ -1818,23 +1818,6 @@ body {
     padding: 2rem 1.5rem 1.5rem;
     text-align: center;
     position: relative;
-    overflow: hidden;
-}
-
-.teacher-card-header::before {
-    content: '';
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
-    animation: shimmer 3s infinite;
-}
-
-@keyframes shimmer {
-    0%, 100% { transform: translate(-50%, -50%) rotate(0deg); }
-    50% { transform: translate(-50%, -50%) rotate(180deg); }
 }
 
 .teacher-avatar-container {
@@ -2594,3 +2577,253 @@ body {
         margin-right: 10px !important;
     }
 }
+
+/* Teacher Records Controls - Modern Design */
+.teacher-controls-wrapper {
+    position: relative;
+}
+
+.teacher-controls-card {
+    background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+    border-radius: 20px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    transition: all 0.3s ease;
+}
+
+[data-bs-theme="dark"] .teacher-controls-card {
+    background: linear-gradient(135deg, #374151 0%, #1f2937 100%);
+    border: 1px solid rgba(75, 85, 99, 0.3);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+}
+
+.controls-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 1.5rem 2rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    position: relative;
+}
+
+.controls-icon {
+    width: 50px;
+    height: 50px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    color: white;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    position: relative;
+    z-index: 2;
+}
+
+.controls-title h4 {
+    color: white;
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin: 0;
+    position: relative;
+    z-index: 2;
+}
+
+.controls-title p {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 0.9rem;
+    margin: 0.25rem 0 0 0;
+    position: relative;
+    z-index: 2;
+}
+
+.controls-body {
+    padding: 2rem;
+}
+
+.control-row {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr auto;
+    gap: 1.5rem;
+    align-items: end;
+}
+
+@media (max-width: 1200px) {
+    .control-row {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+}
+
+.control-group {
+    position: relative;
+}
+
+.control-icon {
+    position: absolute;
+    left: 1rem;
+    top: 66%;
+    transform: translateY(-50%);
+    color: var(--primary-color);
+    font-size: 1rem;
+    z-index: 3;
+    pointer-events: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.25rem;
+    height: 1.25rem;
+}
+
+.control-content label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.modern-input,
+.modern-select {
+    width: 100%;
+    padding: 0.875rem 1rem 0.875rem 3rem;
+    border: 2px solid #e5e7eb;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-family: inherit;
+    background: white;
+    color: var(--text-primary);
+    transition: all 0.3s ease;
+    position: relative;
+    line-height: 1.5;
+    box-sizing: border-box;
+}
+
+.modern-input:focus,
+.modern-select:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    transform: translateY(-1px);
+}
+
+.modern-select {
+    cursor: pointer;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+    background-position: right 0.75rem center;
+    background-repeat: no-repeat;
+    background-size: 1.5em 1.5em;
+    padding-right: 3rem;
+}
+
+.search-group .control-icon {
+    color: var(--primary-color);
+}
+
+.search-group .modern-input:focus + .control-icon,
+.modern-input:focus ~ .control-icon {
+    color: var(--primary-color);
+}
+
+[data-bs-theme="dark"] .modern-input,
+[data-bs-theme="dark"] .modern-select {
+    background: #374151;
+    border-color: #4b5563;
+    color: var(--text-primary);
+}
+
+[data-bs-theme="dark"] .modern-input:focus,
+[data-bs-theme="dark"] .modern-select:focus {
+    border-color: var(--primary-color);
+    background: #4b5563;
+}
+
+.action-group {
+    display: flex;
+    align-items: end;
+}
+
+.modern-btn {
+    padding: 0.875rem 1.5rem;
+    border: none;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-size: 0.85rem;
+}
+
+.clear-btn {
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+    color: white;
+    box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
+}
+
+.clear-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4);
+}
+
+.clear-btn:active {
+    transform: translateY(0);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .controls-header {
+        padding: 1rem 1.5rem;
+        flex-direction: column;
+        text-align: center;
+        gap: 0.5rem;
+    }
+
+    .controls-icon {
+        width: 40px;
+        height: 40px;
+        font-size: 1rem;
+    }
+
+    .controls-title h4 {
+        font-size: 1.1rem;
+    }
+
+    .controls-body {
+        padding: 1.5rem 1rem;
+    }
+
+    .control-row {
+        gap: 1rem;
+    }
+
+    .modern-input,
+    .modern-select {
+        padding: 0.75rem 1rem 0.75rem 2.75rem;
+        font-size: 0.95rem;
+        line-height: 1.5;
+    }
+
+    .control-icon {
+        left: 0.875rem;
+        font-size: 0.9rem;
+        width: 1rem;
+        height: 1rem;
+    }
+
+    .modern-btn {
+        padding: 0.75rem 1.25rem;
+        font-size: 0.8rem;
+    }
+}
+
+

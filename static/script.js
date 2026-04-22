@@ -57,6 +57,9 @@ $(document).ready(function () {
     // Load teacher records initially
     loadTeacherRecords();
 
+    // Initialize teacher records controls
+    initializeTeacherRecordsControls();
+
     // Add global debug functions for testing
     window.debugTeacherNames = function() {
         console.log('=== DEBUG: Teacher Names Comparison ===');
@@ -743,12 +746,22 @@ function mergeConsecutiveSlots(entries) {
     return merged;
 }
 
-// Load teacher records
-function loadTeacherRecords() {
+// Load teacher records with search/filter/sort
+function loadTeacherRecords(search = '', subjectFilter = '', sectionFilter = '', sortBy = 'name') {
     const container = document.getElementById('teacher-records-container');
     container.innerHTML = '<div class="text-center"><i class="fas fa-spinner fa-spin fa-2x"></i><p>Loading teacher records...</p></div>';
 
-    fetch('/get_teachers')
+    // Build query string
+    const params = new URLSearchParams();
+    if (search) params.append('search', search);
+    if (subjectFilter) params.append('subject', subjectFilter);
+    if (sectionFilter) params.append('section', sectionFilter);
+    if (sortBy) params.append('sort', sortBy);
+
+    const queryString = params.toString();
+    const url = '/get_teachers' + (queryString ? '?' + queryString : '');
+
+    fetch(url)
         .then(response => response.json())
         .then(teachers => {
             if (teachers.length === 0) {
@@ -866,6 +879,110 @@ function loadTeacherRecords() {
             console.error('Error loading teacher records:', error);
             container.innerHTML = '<div class="text-center text-danger"><i class="fas fa-exclamation-triangle fa-2x mb-3"></i><p>Error loading teacher records. Please try again.</p></div>';
         });
+}
+
+// Initialize teacher records controls
+function initializeTeacherRecordsControls() {
+    // Populate filter dropdowns
+    populateTeacherFilterDropdowns();
+
+    // Add event listeners
+    const searchInput = document.getElementById('teacher-search-input');
+    const subjectFilter = document.getElementById('teacher-filter-subject');
+    const sectionFilter = document.getElementById('teacher-filter-section');
+    const sortBy = document.getElementById('teacher-sort-by');
+
+    if (searchInput) {
+        searchInput.addEventListener('input', debounce(handleTeacherRecordsFilter, 300));
+    }
+    if (subjectFilter) {
+        subjectFilter.addEventListener('change', handleTeacherRecordsFilter);
+    }
+    if (sectionFilter) {
+        sectionFilter.addEventListener('change', handleTeacherRecordsFilter);
+    }
+    if (sortBy) {
+        sortBy.addEventListener('change', handleTeacherRecordsFilter);
+    }
+}
+
+// Populate filter dropdowns with available subjects and sections
+function populateTeacherFilterDropdowns() {
+    fetch('/get_teachers')
+        .then(response => response.json())
+        .then(teachers => {
+            const subjects = new Set();
+            const sections = new Set();
+
+            teachers.forEach(teacher => {
+                if (teacher.subjects) {
+                    teacher.subjects.split(', ').forEach(subject => subjects.add(subject.trim()));
+                }
+                if (teacher.sections) {
+                    teacher.sections.split(', ').forEach(section => sections.add(section.trim()));
+                }
+            });
+
+            // Populate subject filter
+            const subjectSelect = document.getElementById('teacher-filter-subject');
+            if (subjectSelect) {
+                subjectSelect.innerHTML = '<option value="">All Subjects</option>';
+                Array.from(subjects).sort().forEach(subject => {
+                    const option = document.createElement('option');
+                    option.value = subject;
+                    option.textContent = subject;
+                    subjectSelect.appendChild(option);
+                });
+            }
+
+            // Populate section filter
+            const sectionSelect = document.getElementById('teacher-filter-section');
+            if (sectionSelect) {
+                sectionSelect.innerHTML = '<option value="">All Sections</option>';
+                Array.from(sections).sort().forEach(section => {
+                    const option = document.createElement('option');
+                    option.value = section;
+                    option.textContent = section;
+                    sectionSelect.appendChild(option);
+                });
+            }
+        })
+        .catch(error => {
+            console.error('Error populating filter dropdowns:', error);
+        });
+}
+
+// Handle teacher records filter changes
+function handleTeacherRecordsFilter() {
+    const search = document.getElementById('teacher-search-input')?.value || '';
+    const subject = document.getElementById('teacher-filter-subject')?.value || '';
+    const section = document.getElementById('teacher-filter-section')?.value || '';
+    const sortBy = document.getElementById('teacher-sort-by')?.value || 'name';
+
+    loadTeacherRecords(search, subject, section, sortBy);
+}
+
+// Clear teacher filters
+function clearTeacherFilters() {
+    document.getElementById('teacher-search-input').value = '';
+    document.getElementById('teacher-filter-subject').value = '';
+    document.getElementById('teacher-filter-section').value = '';
+    document.getElementById('teacher-sort-by').value = 'name';
+
+    loadTeacherRecords();
+}
+
+// Debounce function for search input
+function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
 }
 
 // Teacher card action functions

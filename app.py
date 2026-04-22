@@ -411,6 +411,53 @@ def get_teachers():
                     }
                 )
 
+    # Apply search filter
+    search = request.args.get("search", "").strip().lower()
+    if search:
+        teachers_data = [
+            teacher
+            for teacher in teachers_data
+            if search in teacher["name"].lower()
+            or search in teacher["subjects"].lower()
+            or search in teacher["sections"].lower()
+            or search in teacher["designation"].lower()
+            or search in teacher["employee_code"].lower()
+            or search in teacher["office_number"].lower()
+        ]
+
+    # Apply subject filter
+    subject_filter = request.args.get("subject", "").strip()
+    if subject_filter:
+        teachers_data = [
+            teacher
+            for teacher in teachers_data
+            if subject_filter in teacher["subjects"]
+        ]
+
+    # Apply section filter
+    section_filter = request.args.get("section", "").strip()
+    if section_filter:
+        teachers_data = [
+            teacher
+            for teacher in teachers_data
+            if section_filter in teacher["sections"]
+        ]
+
+    # Apply sorting
+    sort_by = request.args.get("sort", "name")
+    if sort_by == "name":
+        teachers_data.sort(key=lambda x: x["name"].lower())
+    elif sort_by == "designation":
+        teachers_data.sort(key=lambda x: (x["designation"] or "").lower())
+    elif sort_by == "subjects":
+        teachers_data.sort(key=lambda x: x["subjects"].lower())
+    elif sort_by == "sections":
+        teachers_data.sort(key=lambda x: x["sections"].lower())
+    elif sort_by == "employee_code":
+        teachers_data.sort(key=lambda x: x["employee_code"] or "")
+    elif sort_by == "office_number":
+        teachers_data.sort(key=lambda x: x["office_number"] or "")
+
     # Check if XLSX export is requested
     if request.path.endswith("/xlsx"):
         filename = "teachers-record.xlsx"
